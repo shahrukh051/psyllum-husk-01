@@ -41,6 +41,10 @@
     </ul>
     <div class="nav-right">
       <a class="nav-cta" href="#blends">Shop Now</a>
+      <button class="cart-btn" id="cart-btn" aria-label="Open cart (0 items)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge" hidden>0</span>
+      </button>
       <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -114,7 +118,10 @@
           </div>
           <div class="blend-title-row"><h3>Chocolate</h3><span class="blend-price">₹899</span></div>
           <p class="blend-desc">Rich, ethically sourced cocoa meets daily digestive wellness.</p>
-          <div class="blend-cta">View Details</div>
+          <button class="blend-cta add-to-cart" data-id="chocolate" data-name="Chocolate" data-price="899" data-image="images/packages/chocolate%20pack.png">
+            <span>Add to Cart</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </button>
         </article>
 
         <article class="blend-card reveal">
@@ -124,7 +131,10 @@
           </div>
           <div class="blend-title-row"><h3>Unflavored</h3><span class="blend-price">₹749</span></div>
           <p class="blend-desc">The raw, foundational ingredient. Built for smoothies, baking, or straight in water.</p>
-          <div class="blend-cta">View Details</div>
+          <button class="blend-cta add-to-cart" data-id="unflavored" data-name="Unflavored" data-price="749" data-image="images/packages/unflavored%20pack.png">
+            <span>Add to Cart</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </button>
         </article>
 
         <article class="blend-card reveal">
@@ -134,7 +144,10 @@
           </div>
           <div class="blend-title-row"><h3>Cheese Berry</h3><span class="blend-price">₹999</span></div>
           <p class="blend-desc">A unique, savoury-sweet profile with fibre jelly — for the adventurous palate.</p>
-          <div class="blend-cta">View Details</div>
+          <button class="blend-cta add-to-cart" data-id="cheese-berry" data-name="Cheese Berry" data-price="999" data-image="images/packages/%27cheese%20berry%20pack.png">
+            <span>Add to Cart</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </button>
         </article>
 
         <article class="blend-card reveal">
@@ -144,7 +157,10 @@
           </div>
           <div class="blend-title-row"><h3>Honey Black Pepper</h3><span class="blend-price">₹949</span></div>
           <p class="blend-desc">A warming, slightly spiced blend intended for restorative evening teas.</p>
-          <div class="blend-cta">View Details</div>
+          <button class="blend-cta add-to-cart" data-id="honey-black-pepper" data-name="Honey Black Pepper" data-price="949" data-image="images/packages/Honey%20paper%20black%20pack.png">
+            <span>Add to Cart</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </button>
         </article>
 
       </div>
@@ -297,7 +313,40 @@
   <div class="footer-bottom wrap">© 2026 Husk &amp; Co. Botanical Wellness. All rights reserved.</div>
 </footer>
 
-<!-- UI interactions (hamburger, FAQ, scroll-reveal) -->
+<!-- Cart overlay -->
+<div class="cart-overlay" id="cart-overlay" aria-hidden="true"></div>
+
+<!-- Cart drawer -->
+<aside class="cart-drawer" id="cart-drawer" aria-label="Shopping cart" aria-hidden="true">
+  <div class="cart-header">
+    <div>
+      <span class="label-caps" style="color:var(--secondary);display:block;margin-bottom:4px;">Your cart</span>
+      <h3 class="cart-title">0 items</h3>
+    </div>
+    <button class="cart-close" id="cart-close" aria-label="Close cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="cart-empty-state" id="cart-empty-state">
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--surface-dim)"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <p style="font-size:15px;color:var(--on-surface-variant);margin:0;">Your cart is empty.</p>
+    <a href="#blends" class="btn-ghost" style="font-size:11px;padding:12px 24px;">Browse Blends</a>
+  </div>
+
+  <div class="cart-items-list" id="cart-items-list" style="display:none;"></div>
+
+  <div class="cart-footer" id="cart-footer" hidden>
+    <div class="cart-subtotal-row">
+      <span>Subtotal</span>
+      <strong id="cart-subtotal-amount">₹0</strong>
+    </div>
+    <p class="cart-shipping-note">🚚 Free shipping on orders of 3+ pouches</p>
+    <button class="btn-primary" style="width:100%;justify-content:center;">Checkout →</button>
+  </div>
+</aside>
+
+<!-- UI interactions (hamburger, FAQ, scroll-reveal, cart) -->
 <script src="js/main.js" defer></script>
 
 <!-- Three.js scenes (ES module) -->
