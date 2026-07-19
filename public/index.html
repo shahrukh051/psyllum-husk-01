@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Husk &amp; Co. offers pure psyllium husk blends — scientifically crafted, certified organic, and non-dust. Four flavours. Free shipping on your first order."/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>"/>
+  <title>Husk &amp; Co. | Pure Botanical Wellness</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700&family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css"/>
+
+  <!-- Three.js import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<!-- Full-page ambient particle canvas (z-index 5, pointer-events none) -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">Husk &amp; Co.</a>
+    <ul class="nav-links">
+      <li><a href="#blends">Shop</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#benefits">Benefits</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="nav-cta" href="#blends">Shop Now</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+    <a href="#blends">Shop</a>
+    <a href="#story">Our Story</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#faq">FAQ</a>
+    <a href="#blends" class="mobile-shop-cta">Shop Now</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow label-caps">Est. 2025 · Small Batch</span>
+          <h1>Pure botanical<br/>wellness.</h1>
+          <p>Scientifically crafted psyllium husk blends, made with a non-dust vegetable fibre and nothing you can't pronounce. Built for the body that wants the basics done right.</p>
+          <a class="btn-primary" href="#blends">Shop the Collection →</a>
+        </div>
+        <div class="hero-visual">
+          <img src="images/packages/Honey%20paper%20black%20pack.png" alt="Husk &amp; Co. Honey Black Pepper psyllium husk pouch" class="hero-product-img"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CERT BAR ===================== -->
+  <section class="certbar">
+    <div class="wrap certbar-inner">
+      <div class="cert-item">
+        <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c-4-2-7-6-7-11 4 0 9 2 11 6 1-4 5-6 8-6 0 8-6 11-9 11z"/></svg>
+        <span class="label-caps">Certified Organic</span>
+      </div>
+      <div class="cert-item">
+        <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>
+        <span class="label-caps">Scientifically Crafted</span>
+      </div>
+      <div class="cert-item">
+        <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+        <span class="label-caps">Plant Based</span>
+      </div>
+      <div class="cert-item">
+        <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+        <span class="label-caps">Non-Dust Formula</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== OUR BLENDS ===================== -->
+  <section class="blends" id="blends">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="label-caps">Our Blends</span>
+        <h2>Four blends. One purpose.</h2>
+        <p>Every pouch starts with the same 150g of non-dust vegetable fibre — flavoured only enough to make the daily habit easy to keep.</p>
+      </div>
+
+      <div class="blend-grid">
+
+        <article class="blend-card reveal">
+          <div class="blend-media m-chocolate">
+            <span class="badge">Bestseller</span>
+            <img src="images/packages/chocolate%20pack.png" alt="Husk &amp; Co. Chocolate psyllium husk pouch"/>
+          </div>
+          <div class="blend-title-row"><h3>Chocolate</h3><span class="blend-price">₹899</span></div>
+          <p class="blend-desc">Rich, ethically sourced cocoa meets daily digestive wellness.</p>
+          <div class="blend-cta">View Details</div>
+        </article>
+
+        <article class="blend-card reveal">
+          <div class="blend-media m-unflavored">
+            <span class="badge">Pure</span>
+            <img src="images/packages/unflavored%20pack.png" alt="Husk &amp; Co. Unflavored psyllium husk pouch"/>
+          </div>
+          <div class="blend-title-row"><h3>Unflavored</h3><span class="blend-price">₹749</span></div>
+          <p class="blend-desc">The raw, foundational ingredient. Built for smoothies, baking, or straight in water.</p>
+          <div class="blend-cta">View Details</div>
+        </article>
+
+        <article class="blend-card reveal">
+          <div class="blend-media m-cheese">
+            <span class="badge">New</span>
+            <img src="images/packages/%27cheese%20berry%20pack.png" alt="Husk &amp; Co. Cheese Berry psyllium husk pouch"/>
+          </div>
+          <div class="blend-title-row"><h3>Cheese Berry</h3><span class="blend-price">₹999</span></div>
+          <p class="blend-desc">A unique, savoury-sweet profile with fibre jelly — for the adventurous palate.</p>
+          <div class="blend-cta">View Details</div>
+        </article>
+
+        <article class="blend-card reveal">
+          <div class="blend-media m-honey">
+            <span class="badge">Limited</span>
+            <img src="images/packages/Honey%20paper%20black%20pack.png" alt="Husk &amp; Co. Honey Black Pepper psyllium husk pouch"/>
+          </div>
+          <div class="blend-title-row"><h3>Honey Black Pepper</h3><span class="blend-price">₹949</span></div>
+          <p class="blend-desc">A warming, slightly spiced blend intended for restorative evening teas.</p>
+          <div class="blend-cta">View Details</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BENEFITS ===================== -->
+  <section id="benefits">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="label-caps">The Benefits</span>
+        <h2>Why psyllium husk, why now.</h2>
+      </div>
+      <div class="benefits-grid reveal">
+        <div class="benefit">
+          <span class="num">01</span>
+          <h3>Gut-first design</h3>
+          <p>A soluble fibre that forms a gentle gel in water, supporting regular, comfortable digestion without harsh stimulants.</p>
+        </div>
+        <div class="benefit">
+          <span class="num">02</span>
+          <h3>Non-dust formula</h3>
+          <p>Finer, cleaner milling means less mess in the glass and an easier daily habit — no gritty aftertaste.</p>
+        </div>
+        <div class="benefit">
+          <span class="num">03</span>
+          <h3>Nothing to hide</h3>
+          <p>Every batch is lab-tested. What's on the label is what's in the pouch — no fillers, no fuss.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== OUR STORY ===================== -->
+  <section class="story" id="story">
+    <div class="wrap story-grid">
+      <div class="reveal">
+        <span class="label-caps" style="color:#8fac9b;">Our Story</span>
+        <h2 style="margin-top:14px;">An ordinary ingredient, taken seriously.</h2>
+        <p>Psyllium husk has been used for generations — we just refused to sell it the way everyone else does: unlabeled, undifferentiated, and dumped in a plain plastic bag.</p>
+        <p>Husk &amp; Co. sources, tests, and blends every batch with the same rigor a lab would use, then packages it like the daily ritual it's meant to be.</p>
+        <div class="story-stats">
+          <div class="stat"><b>150g</b><span>Per pouch, every blend</span></div>
+          <div class="stat"><b>4</b><span>Blends, one fibre base</span></div>
+        </div>
+      </div>
+      <div class="story-media reveal">
+        <img src="images/packages/unflavored%20pack.png" alt="Husk &amp; Co. Unflavored psyllium husk pouch"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="faq-section" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="label-caps">FAQ</span>
+        <h2>Questions we hear daily.</h2>
+        <p>Straight answers about our product, ingredients, and how to use them.</p>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item open">
+          <button class="faq-q" aria-expanded="true">
+            How do I take psyllium husk?
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a"><p class="faq-a-inner">Mix one serving (approx. 5g) into a full glass of water, juice, or smoothie and drink immediately. Follow with another glass of water. Take once daily, preferably before a meal.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Is it safe to take every day?
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a"><p class="faq-a-inner">Yes. Psyllium husk is a well-studied, soluble dietary fibre recognised as safe for daily use. Each batch is lab-tested for purity. As with any supplement, consult a healthcare professional if you have existing conditions.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            What makes Husk &amp; Co. different?
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a"><p class="faq-a-inner">Our non-dust vegetable fibre formula means finer, cleaner milling — no gritty texture, no coughing. Every batch is certified organic, lab-tested, and blended in small runs so you always get the freshest product.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Can I mix it with food or smoothies?
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a"><p class="faq-a-inner">Absolutely. The Unflavored blend is especially popular for baking and smoothies. The flavoured blends taste great in water or milk, but feel free to experiment — it works well stirred into oatmeal and yoghurt too.</p></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Do you ship across India?
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a"><p class="faq-a-inner">Yes, we ship pan-India. Delivery typically takes 3–7 business days. First-order shipping is free. Bulk orders of 3+ pouches also qualify for free shipping.</p></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Start with one pouch.</h2>
+      <p>150g is enough to know if the habit sticks. Free shipping on your first order.</p>
+      <a class="btn-primary" href="#blends">Shop the Collection →</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="#top">Husk &amp; Co.</a>
+      <p>Elevating botanical wellness through transparency, organic origins, and modern science.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#blends">All Blends</a></li>
+        <li><a href="#blends">Bestsellers</a></li>
+        <li><a href="#blends">Subscribe &amp; Save</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#benefits">Sourcing</a></li>
+        <li><a href="#">Certified Organic</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom wrap">© 2026 Husk &amp; Co. Botanical Wellness. All rights reserved.</div>
+</footer>
+
+<!-- UI interactions (hamburger, FAQ, scroll-reveal) -->
+<script src="js/main.js" defer></script>
+
+<!-- Three.js scenes (ES module) -->
+<script type="module" src="js/three-scene.js"></script>
+
+</body>
+</html>
