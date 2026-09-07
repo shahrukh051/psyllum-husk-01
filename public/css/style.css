@@ -330,6 +330,7 @@ section { padding: 88px 0; position: relative; z-index: 1; }
 .blend-media img {
   max-height: 100%;
   object-fit: contain;
+  mix-blend-mode: multiply;
   filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.16));
   transition: transform 0.5s;
 }
