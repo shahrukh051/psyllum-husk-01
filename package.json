@@ -1,32 +1,13 @@
 {
   "name": "husk-and-co",
-  "version": "1.0.0",
-  "description": "Husk & Co. — Pure Botanical Wellness landing page",
-  "main": "server.js",
+  "version": "2.0.0",
+  "description": "Husk & Co. — Pure Botanical Wellness (Python/FastAPI backend)",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon server.js",
-    "start": "NODE_ENV=production node server.js",
-    "prod": "NODE_ENV=production npx pm2 start ecosystem.config.js --env production",
-    "logs": "npx pm2 logs husk-co",
-    "stop": "npx pm2 stop husk-co",
-    "reload": "npx pm2 reload husk-co",
-    "status": "npx pm2 status",
-    "bench": "npx autocannon -c 200 -d 15 http://localhost:3000"
-  },
-  "dependencies": {
-    "@fastify/compress": "^8.0.0",
-    "@fastify/cors": "^10.0.0",
-    "@fastify/helmet": "^12.0.0",
-    "@fastify/rate-limit": "^10.0.0",
-    "@fastify/static": "^8.0.0",
-    "better-sqlite3": "^11.0.0",
-    "dotenv": "^16.0.0",
-    "fastify": "^5.0.0"
+    "dev":   "uvicorn backend.main:app --reload --port 3000",
+    "start": "gunicorn -c gunicorn.conf.py backend.main:app",
+    "install-py": "python3 -m pip install -r requirements.txt"
   },
   "devDependencies": {
-    "autocannon": "^7.0.0",
-    "nodemon": "^3.0.0",
-    "pino-pretty": "^13.1.3",
-    "pm2": "^5.0.0"
+    "nodemon": "^3.0.0"
   }
 }
