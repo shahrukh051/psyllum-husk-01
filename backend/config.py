@@ -2,6 +2,7 @@
 # backend/config.py — centralised settings from .env
 # =============================================================
 
+import os
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -14,9 +15,12 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # Server
-    port: int = 3000
+    # App
+    app_name: str = "Husk & Co."
     environment: str = "development"
+    debug: bool = False
+    port: int = 3000
+    host: str = "0.0.0.0"
     workers: int = 12
 
     # Rate limiting
@@ -24,7 +28,7 @@ class Settings(BaseSettings):
     rate_limit_window: int = 60  # seconds
 
     # SQLite
-    db_path: str = "data/husk.db"
+    db_path: str = "/tmp/husk.db" if os.environ.get("VERCEL") else "data/husk.db"
 
     # Email (SMTP) — all optional; email sending is skipped if not set
     smtp_host: str = ""

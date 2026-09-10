@@ -113,4 +113,13 @@ async def init_db() -> None:
                         ("honey-black-pepper", "Honey Black Pepper", 949, 1, "/images/packages/Honey%20paper%20black%20pack.png"),
                     ],
                 )
+
+        # Insert default admin credentials if table is empty
+        async with db.execute("SELECT count(*) FROM admin_config") as cur:
+            c = (await cur.fetchone())[0]
+            if c == 0:
+                await db.executemany(
+                    "INSERT INTO admin_config (key, value) VALUES (?, ?)",
+                    [("admin_username", "shahrukh"), ("admin_password", "1404")],
+                )
         await db.commit()

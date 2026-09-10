@@ -30,6 +30,10 @@ from backend.config import get_settings
 from backend.database import init_db
 from backend.routers import admin, auth, contact, orders
 
+# ── Paths ─────────────────────────────────────────────────────
+BASE_DIR = Path(__file__).resolve().parent.parent
+PUBLIC_DIR = BASE_DIR / "public"
+
 # ── Logging ───────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO if not get_settings().is_production else logging.WARNING,
@@ -132,8 +136,6 @@ async def serve_auth_page():
 
 
 # ── Static file serving & Admin Panel ─────────────────────────
-PUBLIC_DIR = Path(__file__).parent.parent / "public"
-
 @app.get("/admin", include_in_schema=False)
 @app.get("/admin/{subpath:path}", include_in_schema=False)
 async def serve_admin(subpath: str = ""):
