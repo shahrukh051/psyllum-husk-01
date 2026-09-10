@@ -2,15 +2,11 @@
   "name": "husk-and-co",
   "version": "1.0.0",
   "description": "Husk & Co. — Pure Botanical Wellness landing page",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2"
+    "start": "sirv public --port 3000 --single",
+    "dev": "sirv public --port 3000 --single --dev"
   },
   "devDependencies": {
-    "nodemon": "^3.0.0"
+    "sirv-cli": "^2.0.2"
   }
 }

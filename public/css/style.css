@@ -748,11 +748,13 @@ section {
   background: var(--background);
 }
 
-.faq-item+.faq-item {
+.faq-item + .faq-item {
   border-top: 1px solid var(--surface-dim);
 }
 
+/* Remove default marker on summary */
 .faq-q {
+  list-style: none;
   width: 100%;
   background: none;
   border: none;
@@ -770,6 +772,8 @@ section {
   transition: background 0.2s;
 }
 
+.faq-q::-webkit-details-marker { display: none; }
+
 .faq-q:hover {
   background: var(--surface-container-low);
 }
@@ -780,14 +784,9 @@ section {
   color: var(--secondary);
 }
 
-.faq-item.open .faq-q svg {
+/* Rotate SVG when details is open — no JS needed */
+details[open] .faq-q svg {
   transform: rotate(45deg);
-}
-
-.faq-a {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
 }
 
 .faq-a-inner {
@@ -796,10 +795,6 @@ section {
   font-size: 15px;
   line-height: 1.75;
   margin: 0;
-}
-
-.faq-item.open .faq-a {
-  max-height: 400px;
 }
 
 /* ---- CTA band ---- */
@@ -1241,6 +1236,7 @@ footer {
     padding: 0 20px 18px;
     font-size: 14px;
   }
+
 
   .footer-col h4 {
     margin-bottom: 12px;
