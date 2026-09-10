@@ -5,13 +5,19 @@
 # Dev (auto-reload):    uvicorn backend.main:app --reload --port 3000
 # =============================================================
 
+import os
 import multiprocessing
+from pathlib import Path
 
-# Bind
-bind        = "0.0.0.0:3000"
+# Ensure logs directory exists if file logging is used
+Path("logs").mkdir(parents=True, exist_ok=True)
 
-# Workers: one per CPU core (same as Node.js cluster)
-workers     = multiprocessing.cpu_count()
+# Bind: support Render / Heroku / container PORT environment variable
+port = os.environ.get("PORT", "3000")
+bind = f"0.0.0.0:{port}"
+
+# Workers: one per CPU core (safe fallback for shared container cores)
+workers = max(1, min(multiprocessing.cpu_count(), 4))
 worker_class = "uvicorn.workers.UvicornWorker"
 
 # Timeouts
@@ -19,10 +25,13 @@ timeout          = 30   # kill worker if silent for 30s
 graceful_timeout = 10   # wait 10s for in-flight requests on reload
 keepalive        = 5    # keep TCP connection alive for 5s
 
-# Logging
-loglevel    = "warning"
-accesslog   = "logs/access.log"
-errorlog    = "logs/error.log"
+# Logging: on cloud platforms like Render, stdout/stderr streams to the dashboard
+if os.environ.get("RENDER") or not os.path.isdir("logs"):
+    accesslog = "-"
+    errorlog  = "-"
+else:
+    accesslog = "-"
+    errorlog  = "-"
 
 # Auto-restart workers after N requests (prevents memory leaks)
 max_requests        = 1000

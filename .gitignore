@@ -8,7 +8,8 @@ data/*.db-shm
 data/*.db-wal
 
 # Logs
-logs/
+logs/*.log
+!logs/.gitkeep
 
 # Python
 __pycache__/
