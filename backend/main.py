@@ -20,7 +20,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -132,14 +132,13 @@ async def serve_auth_page():
             str(login_file),
             headers={"Cache-Control": "no-cache, must-revalidate"},
         )
-    return JSONResponse({"error": "Auth portal not found"}, status_code=404)
+    return RedirectResponse("/login.html")
 
 
 # ── Static file serving & Admin Panel ─────────────────────────
 @app.get("/admin", include_in_schema=False)
 @app.get("/admin/{subpath:path}", include_in_schema=False)
 async def serve_admin(subpath: str = ""):
-    # If a static file inside /admin exists (e.g. admin.css, admin.js)
     admin_no_cache = {
         "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
         "Pragma": "no-cache",
@@ -152,13 +151,16 @@ async def serve_admin(subpath: str = ""):
     admin_index = PUBLIC_DIR / "admin" / "index.html"
     if admin_index.exists():
         return FileResponse(str(admin_index), headers=admin_no_cache)
-    return JSONResponse({"error": "Admin portal not found"}, status_code=404)
+    return RedirectResponse(f"/admin/{subpath}" if subpath else "/admin/")
 
-app.mount(
-    "/",
-    StaticFiles(directory=str(PUBLIC_DIR), html=True),
-    name="static",
-)
+# On Vercel, static files in /public are served automatically by Vercel CDN at the platform level.
+# Only mount StaticFiles for local development if the directory exists.
+if not os.environ.get("VERCEL") and PUBLIC_DIR.is_dir():
+    app.mount(
+        "/",
+        StaticFiles(directory=str(PUBLIC_DIR), html=True),
+        name="static",
+    )
 
 
 # ── SPA fallback: unknown routes → index.html ─────────────────
@@ -171,4 +173,4 @@ async def not_found(request: Request, exc):
     index = PUBLIC_DIR / "index.html"
     if index.exists():
         return FileResponse(str(index))
-    return JSONResponse({"error": "Not found"}, status_code=404)
+    return RedirectResponse("/")

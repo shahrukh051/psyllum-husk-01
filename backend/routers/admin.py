@@ -16,7 +16,10 @@ from pathlib import Path
 from typing import Any
 
 import aiosqlite
-import psutil
+try:
+    import psutil
+except ImportError:
+    psutil = None
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from pydantic import BaseModel, Field
 
@@ -553,9 +556,22 @@ async def delete_contact(
 @router.get("/telemetry")
 async def server_telemetry(admin: dict[str, Any] = Depends(get_current_admin)):
     """Returns real-time server diagnostics, memory, uptime, and database telemetry."""
-    process = psutil.Process(os.getpid())
-    mem_info = process.memory_info()
-    cpu_pct = process.cpu_percent(interval=0.05)
+    cpu_pct = 0.0
+    mem_rss = 0.0
+    sys_ram = 0.0
+    threads = 1
+
+    if psutil is not None:
+        try:
+            process = psutil.Process(os.getpid())
+            mem_info = process.memory_info()
+            mem_rss = round(mem_info.rss / (1024 * 1024), 1)
+            cpu_pct = round(process.cpu_percent(interval=0.05), 1)
+            threads = process.num_threads()
+            sys_ram = psutil.virtual_memory().percent
+        except Exception:
+            pass
+
     uptime_sec = int(time.time() - START_TIME)
 
     settings = get_settings()
@@ -566,13 +582,13 @@ async def server_telemetry(admin: dict[str, Any] = Depends(get_current_admin)):
         "status": "online",
         "uptime_seconds": uptime_sec,
         "uptime_formatted": f"{uptime_sec // 3600}h {(uptime_sec % 3600) // 60}m {uptime_sec % 60}s",
-        "cpu_percent": round(cpu_pct, 1),
-        "memory_rss_mb": round(mem_info.rss / (1024 * 1024), 1),
-        "system_ram_percent": psutil.virtual_memory().percent,
+        "cpu_percent": cpu_pct,
+        "memory_rss_mb": mem_rss,
+        "system_ram_percent": sys_ram,
         "database_size_kb": db_size_kb,
         "database_path": settings.db_path,
         "pid": os.getpid(),
-        "threads": process.num_threads(),
+        "threads": threads,
         "python_version": platform.python_version(),
         "platform": platform.platform(),
         "environment": settings.environment,
