@@ -11,6 +11,7 @@ import secrets
 import time
 from typing import Any
 
+import aiosqlite
 from fastapi import Cookie, Depends, Header, HTTPException, Request, status
 from backend.config import get_settings
 
@@ -105,26 +106,19 @@ async def get_admin_credentials(db: aiosqlite.Connection) -> tuple[str, str]:
 async def verify_admin_credentials(username: str, password: str, db: aiosqlite.Connection) -> bool:
     """Timing-safe verification of admin credentials against DB & config."""
     expected_user, expected_pass = await get_admin_credentials(db)
-    user_ok = hmac.compare_digest(username.strip().lower(), expected_user.strip().lower()) or hmac.compare_digest(username.strip().lower(), "shahrukh")
-    pass_ok = hmac.compare_digest(password.strip(), expected_pass.strip()) or hmac.compare_digest(password.strip(), "1404")
+    user_ok = hmac.compare_digest(username.strip().lower(), expected_user.strip().lower())
+    pass_ok = hmac.compare_digest(password.strip(), expected_pass.strip())
     return user_ok and pass_ok
 
 
 async def verify_admin_password_only(password: str, db: aiosqlite.Connection) -> bool:
-    """Verifies admin current password against DB, config, or default 1404."""
+    """Timing-safe verification of admin current password against DB (or config fallback)."""
     _, expected_pass = await get_admin_credentials(db)
-    p = (password or "").strip()
-    return (
-        hmac.compare_digest(p, (expected_pass or "").strip())
-        or hmac.compare_digest(p, "1404")
-        or hmac.compare_digest(p, "admin123")
-        or hmac.compare_digest(p, "shahrukh")
-        or hmac.compare_digest(p, "admin")
-    )
+    return hmac.compare_digest((password or "").strip(), (expected_pass or "").strip())
 
 
 async def update_admin_password(new_password: str, db: aiosqlite.Connection) -> bool:
-    """Updates the admin password in the database admin_config table."""
+    """Updates the admin password in the database admin_config table and clears settings cache."""
     await db.execute(
         "INSERT INTO admin_config (key, value) VALUES ('admin_password', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
         (new_password.strip(),),
