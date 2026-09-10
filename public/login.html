@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Account — Husk &amp; Co.</title>
+  <meta name="description" content="Sign in or register for your Husk & Co. account. Access your organic botanical orders, tracking, and exclusive blends.">
+  <link rel="icon" type="image/png" href="/images/packages/unflavored%20pack.png">
+  <link rel="stylesheet" href="/css/auth.css?v=20260911_v2">
+</head>
+<body>
+
+  <!-- Back to Store Navigation -->
+  <a href="/" class="nav-home-back">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    <span>Store</span>
+  </a>
+
+  <!-- Main Split-Card Canvas -->
+  <main class="auth-split-card">
+
+    <!-- =========================================================
+         LEFT COLUMN: INTERACTIVE FORM (LOGIN & REGISTER)
+         ========================================================= -->
+    <div class="auth-form-column">
+
+      <!-- PANE 1: LOGIN ("Welcome home") -->
+      <div class="auth-form-inner" id="paneLogin">
+        <!-- Top Icon Matching Reference -->
+        <div class="auth-brand-emblem">🏡</div>
+
+        <div class="auth-header">
+          <h1 class="auth-title">Welcome home</h1>
+          <p class="auth-subtitle">Please enter your details.</p>
+        </div>
+
+        <div class="auth-alert-box" id="loginAlert"></div>
+
+        <form class="auth-form" id="formLogin">
+          <!-- Email Input with Right Envelope Icon -->
+          <div class="pill-input-group">
+            <input type="text" id="loginEmail" class="pill-input" placeholder="Email" required autocomplete="username">
+            <span class="pill-input-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </span>
+          </div>
+
+          <!-- Password Input with Right Eye Icon -->
+          <div class="pill-input-group">
+            <input type="password" id="loginPassword" class="pill-input" placeholder="Password" required autocomplete="current-password">
+            <button type="button" class="pill-input-icon interactive js-toggle-pwd" data-target="loginPassword" title="Toggle password visibility">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <!-- Auxiliary Options Matching Reference -->
+          <div class="auth-remember-row">
+            <label class="checkbox-remember">
+              <input type="checkbox" id="loginRemember" checked>
+              <span>Remember for 30 days</span>
+            </label>
+            <a href="javascript:void(0)" onclick="alert('Please contact customer support at hello@huskandco.in or create a new account.')" class="link-forgot">Forgot password?</a>
+          </div>
+
+          <!-- Primary Caramel / Terracotta Pill Button -->
+          <button type="submit" class="btn-terracotta-pill" id="btnLoginSubmit">
+            Login
+          </button>
+        </form>
+
+        <!-- Social Divider -->
+        <div class="auth-social-divider">or</div>
+
+        <!-- Social Circles (Apple, Google, Facebook) -->
+        <div class="auth-social-row">
+          <button type="button" class="btn-social-circle" onclick="alert('Social sign-in ready. Please enter your email above for instant login.')" title="Continue with Apple">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 1.01-2.87-.96.04-2.05.64-2.73 1.43-.59.69-1.11 1.77-1.03 2.85 1.08.08 2.16-.54 2.75-1.41z"/></svg>
+          </button>
+
+          <button type="button" class="btn-social-circle" onclick="alert('Social sign-in ready. Please enter your email above for instant login.')" title="Continue with Google">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.34 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.26C.46 8.17 0 9.97 0 12s.46 3.83 1.26 5.42l4.02-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+          </button>
+
+          <button type="button" class="btn-social-circle" onclick="alert('Social sign-in ready. Please enter your email above for instant login.')" title="Continue with Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </button>
+        </div>
+
+        <!-- Footer Link -->
+        <div class="auth-switch-footer">
+          Don't have an account? <a href="#register" class="js-switch-to-reg">Sign up</a>
+        </div>
+      </div>
+
+      <!-- PANE 2: REGISTER ("Create account") -->
+      <div class="auth-form-inner hidden-pane" id="paneRegister">
+        <div class="auth-brand-emblem">🌿</div>
+
+        <div class="auth-header">
+          <h1 class="auth-title">Create account</h1>
+          <p class="auth-subtitle">Join Husk &amp; Co. for pure organic botanical wellness.</p>
+        </div>
+
+        <div class="auth-alert-box" id="registerAlert"></div>
+
+        <form class="auth-form" id="formRegister">
+          <!-- Full Name Input -->
+          <div class="pill-input-group">
+            <input type="text" id="regName" class="pill-input" placeholder="Full Name" required autocomplete="name">
+            <span class="pill-input-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+          </div>
+
+          <!-- Email Input -->
+          <div class="pill-input-group">
+            <input type="email" id="regEmail" class="pill-input" placeholder="Email" required autocomplete="email">
+            <span class="pill-input-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </span>
+          </div>
+
+          <!-- Phone Number Input (Captured for Shahrukh's Admin CRM) -->
+          <div class="pill-input-group">
+            <input type="tel" id="regPhone" class="pill-input" placeholder="Phone Number (e.g. 9876543210)" required autocomplete="tel">
+            <span class="pill-input-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </span>
+          </div>
+
+          <!-- Password Input with Eye Toggle -->
+          <div class="pill-input-group">
+            <input type="password" id="regPassword" class="pill-input" placeholder="Password (min 6 chars)" required autocomplete="new-password">
+            <button type="button" class="pill-input-icon interactive js-toggle-pwd" data-target="regPassword" title="Toggle password visibility">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <!-- Optional Delivery Address Toggle -->
+          <div>
+            <button type="button" class="register-address-toggle" id="btnToggleAddress">+ Add Delivery Address (Optional)</button>
+            <div class="register-address-fields" id="registerAddressFields">
+              <input type="text" id="regAddress" class="pill-input" placeholder="Street Address / House No.">
+              <div style="display:flex;gap:8px;">
+                <input type="text" id="regCity" class="pill-input" style="flex:1;" placeholder="City">
+                <input type="text" id="regPincode" class="pill-input" style="width:115px;" placeholder="Pincode">
+              </div>
+            </div>
+          </div>
+
+          <!-- Auxiliary Options -->
+          <div class="auth-remember-row" style="margin-top:2px;">
+            <label class="checkbox-remember">
+              <input type="checkbox" id="regRemember" checked>
+              <span>Remember for 30 days</span>
+            </label>
+            <span style="font-size:11px;color:var(--text-light);">Secure SSL</span>
+          </div>
+
+          <!-- Primary Submit Button -->
+          <button type="submit" class="btn-terracotta-pill" id="btnRegisterSubmit">
+            Create Account
+          </button>
+        </form>
+
+        <!-- Social Divider -->
+        <div class="auth-social-divider">or</div>
+
+        <!-- Social Circles -->
+        <div class="auth-social-row">
+          <button type="button" class="btn-social-circle" onclick="alert('Social sign-in ready. Please enter your email above for instant login.')" title="Continue with Apple">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 1.01-2.87-.96.04-2.05.64-2.73 1.43-.59.69-1.11 1.77-1.03 2.85 1.08.08 2.16-.54 2.75-1.41z"/></svg>
+          </button>
+
+          <button type="button" class="btn-social-circle" onclick="alert('Social sign-in ready. Please enter your email above for instant login.')" title="Continue with Google">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.34 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.26C.46 8.17 0 9.97 0 12s.46 3.83 1.26 5.42l4.02-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+          </button>
+
+          <button type="button" class="btn-social-circle" onclick="alert('Social sign-in ready. Please enter your email above for instant login.')" title="Continue with Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </button>
+        </div>
+
+        <!-- Footer Link -->
+        <div class="auth-switch-footer">
+          Already have an account? <a href="#login" class="js-switch-to-login">Log in</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================
+         RIGHT COLUMN: LUXURY BRAND & PRODUCT SHOWCASE (DESKTOP)
+         ========================================================= -->
+    <div class="auth-visual-column">
+      <div class="visual-header">
+        <div class="visual-badge">100% Organic Origins</div>
+        <h2 class="visual-title">Pure botanical fibre</h2>
+        <p class="visual-subtitle">
+          Lab-tested, non-dust organic psyllium husk blends crafted for effortless gut wellness.
+        </p>
+      </div>
+
+      <div class="visual-centerpiece">
+        <img src="/images/packages/unflavored%20pack.png" alt="Husk &amp; Co. Organic Psyllium Husk Pouch" class="visual-product-img">
+      </div>
+
+      <div class="visual-footer-stats">
+        <div class="stat-item">
+          <div class="stat-val">150g</div>
+          <div class="stat-lbl">Pure Pouch</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">4 Blends</div>
+          <div class="stat-lbl">Crafted Flavours</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">Pan-India</div>
+          <div class="stat-lbl">Free Shipping</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/js/auth.js?v=20260911_v2"></script>
+</body>
+</html>

@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Store Admin — Husk & Co.</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/admin.css?v=20260911_v10">
+  <link rel="icon" type="image/png" href="/images/packages/unflavored%20pack.png">
+</head>
+<body>
+
+  <!-- ======================================================================
+       ADMIN LOGIN SCREEN (Hidden if authenticated)
+       ====================================================================== -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">🌿</div>
+      <h1 class="login-title">Husk &amp; Co. Admin</h1>
+      <p class="login-subtitle">Luxury Botanical Wellness — Command Console</p>
+
+      <div class="login-error" id="loginErrorMsg"></div>
+
+      <form class="login-form" id="loginForm" onsubmit="event.preventDefault(); window.handleAdminLogin();">
+        <div class="form-group">
+          <label for="adminUsername">Admin Username</label>
+          <div class="input-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="adminUsername" class="form-input" value="shahrukh" required autocomplete="username" placeholder="Username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <div class="input-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="adminPassword" class="form-input" value="1404" required autocomplete="current-password" placeholder="Password">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginSubmitBtn">Sign In to Dashboard →</button>
+      </form>
+
+      <div class="login-hint">
+        Credentials: <code>shahrukh</code> / <code>1404</code><br>
+        Configurable in <code>.env</code> &amp; Admin Profile
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MAIN ADMIN DASHBOARD
+       ====================================================================== -->
+  <div id="app" style="display:none;">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">H</div>
+        <div>
+          <div class="brand-title">Husk &amp; Co.</div>
+          <span class="brand-badge">LUXURY ADMIN</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Overview</div>
+        <a class="nav-item active" data-tab="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" data-tab="orders">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          Orders
+          <span class="nav-badge" id="navOrdersBadge">0</span>
+        </a>
+        <a class="nav-item" data-tab="products">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Products
+        </a>
+        <a class="nav-item" data-tab="customers">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Customers
+        </a>
+
+        <div class="nav-section-title">Support &amp; Core</div>
+        <a class="nav-item" data-tab="contacts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Inquiries
+          <span class="nav-badge" id="navContactsBadge">0</span>
+        </a>
+        <a class="nav-item" data-tab="telemetry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Telemetry HUD
+        </a>
+        <a class="nav-item" data-tab="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/" target="_blank" class="btn-secondary" style="width:100%;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Live Store
+        </a>
+        <button class="btn-secondary" onclick="window.openProfileModal()" style="width:100%;justify-content:center;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Change Password
+        </button>
+        <button class="btn-logout" onclick="window.handleAdminLogout()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN APP AREA -->
+    <div class="admin-main">
+
+      <!-- TOP STICKY HEADER -->
+      <header class="admin-header">
+        <div class="header-left">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="globalSearchInput" placeholder="Search orders, customers, phone, ID..." oninput="window.handleGlobalSearch(this.value)">
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="telemetry-pill">
+            <span class="pulse-dot"></span>
+            <span id="telemetryHeaderTxt">ASGI 12-CORE • 20K READY</span>
+          </div>
+
+          <button class="btn-primary-admin" onclick="window.openProfileModal()" style="padding:6px 14px;font-size:12px;gap:7px;border-radius:20px;box-shadow:0 0 15px rgba(16,185,129,0.3);cursor:pointer;" title="Change Admin Password">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Change Password
+          </button>
+
+          <div class="admin-profile" onclick="window.openProfileModal()" style="cursor:pointer;" title="Click to Change Password">
+            <div class="admin-avatar" id="adminAvatar">S</div>
+            <div>
+              <span class="admin-name" id="adminHeaderName">Shahrukh (Admin)</span>
+              <span class="admin-role" style="color:var(--accent-emerald);">Active Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD OVERVIEW (Image 1 replica) -->
+      <main class="admin-content tab-content" id="tabDashboard">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Dashboard</h2>
+            <p class="page-subtitle">Real-time revenue, order telemetry, and sales metrics</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-secondary" onclick="window.fetchDashboardStats()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+            <a href="/api/admin/export/orders.csv" class="btn-primary-admin" download>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </a>
+          </div>
+        </div>
+
+        <!-- KPI 4 CARDS (Image 1 top row) -->
+        <div class="kpi-grid">
+          <div class="kpi-card emerald">
+            <div class="kpi-top">
+              <span class="kpi-label">Total Revenue</span>
+              <div class="kpi-icon-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiRevenue">₹0.00</div>
+            <span class="kpi-growth growth-pos">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+              <span id="kpiRevenueGrowth">+18.5%</span>
+            </span>
+          </div>
+
+          <div class="kpi-card cyan">
+            <div class="kpi-top">
+              <span class="kpi-label">New Orders</span>
+              <div class="kpi-icon-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiOrders">0</div>
+            <span class="kpi-growth growth-pos">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+              <span id="kpiOrdersGrowth">+12.1%</span>
+            </span>
+          </div>
+
+          <div class="kpi-card violet">
+            <div class="kpi-top">
+              <span class="kpi-label">Total Customers</span>
+              <div class="kpi-icon-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiCustomers">0</div>
+            <span class="kpi-growth growth-pos">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+              <span id="kpiCustomersGrowth">+5.3%</span>
+            </span>
+          </div>
+
+          <div class="kpi-card amber">
+            <div class="kpi-top">
+              <span class="kpi-label">Sales Conversion</span>
+              <div class="kpi-icon-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+            </div>
+            <div class="kpi-value" id="kpiConversion">4.8%</div>
+            <span class="kpi-growth growth-pos">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+              <span id="kpiConversionGrowth">+0.9%</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- GLOWING SPLINE CHART (Image 1 middle row) -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Sales Performance (30 Days)</h3>
+            </div>
+            <div class="chart-controls">
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <span class="legend-dot cyan"></span>
+                  <span>Revenue (₹)</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dot violet"></span>
+                  <span>Orders</span>
+                </div>
+              </div>
+              <div class="pill-toggle-group">
+                <button class="pill-toggle-btn active" id="btnDailyRevenue" onclick="window.toggleChartMetric('revenue')">Daily Revenue</button>
+                <button class="pill-toggle-btn" id="btnDailyOrders" onclick="window.toggleChartMetric('orders')">Orders</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="canvas-container">
+            <canvas id="salesChart"></canvas>
+            <div class="chart-tooltip" id="chartTooltip">
+              <div class="tooltip-date" id="tooltipDate">Oct 07</div>
+              <div class="tooltip-val" id="tooltipVal">₹16,816</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TWO COLUMN BOTTOM SECTION (Image 1 bottom row) -->
+        <div class="dashboard-grid">
+
+          <!-- RECENT ORDERS -->
+          <div class="section-card">
+            <div class="section-header">
+              <h3 class="section-title">Recent Orders</h3>
+              <a href="javascript:void(0)" onclick="window.switchTab('orders')" class="btn-secondary" style="font-size:11px;padding:4px 10px;">View All</a>
+            </div>
+
+            <div class="orders-filter-row">
+              <div class="status-filter-pills" id="dashboardStatusPills">
+                <span class="filter-pill active" onclick="window.filterDashboardOrders('all', this)">All</span>
+                <span class="filter-pill" onclick="window.filterDashboardOrders('pending', this)">Pending</span>
+                <span class="filter-pill" onclick="window.filterDashboardOrders('processing', this)">Processing</span>
+                <span class="filter-pill" onclick="window.filterDashboardOrders('shipped', this)">Shipped</span>
+                <span class="filter-pill" onclick="window.filterDashboardOrders('delivered', this)">Delivered</span>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrdersTbody">
+                  <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted);">Loading orders...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Customer Statistics Donut & Top Selling Products -->
+          <div style="display:flex;flex-direction:column;gap:24px;">
+
+            <!-- Customer Statistics Donut (Image 1 right card) -->
+            <div class="section-card">
+              <div class="section-header">
+                <h3 class="section-title">Customer Statistics</h3>
+              </div>
+              <div class="donut-wrap">
+                <div class="donut-chart-container">
+                  <canvas id="customerDonutChart" width="180" height="180"></canvas>
+                  <div class="donut-center-info">
+                    <div class="donut-center-val" id="donutTotalCust">3,125</div>
+                    <div class="donut-center-sub">Total Clients</div>
+                  </div>
+                </div>
+
+                <div class="donut-legend">
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <span class="legend-dot amber"></span>
+                      <span>VIP</span>
+                    </div>
+                    <span class="donut-legend-pct">15%</span>
+                  </div>
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <span class="legend-dot emerald"></span>
+                      <span>Loyal</span>
+                    </div>
+                    <span class="donut-legend-pct">28%</span>
+                  </div>
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <span class="legend-dot cyan"></span>
+                      <span>New</span>
+                    </div>
+                    <span class="donut-legend-pct">22%</span>
+                  </div>
+                  <div class="donut-legend-item">
+                    <div class="donut-legend-left">
+                      <span class="legend-dot violet"></span>
+                      <span>Returning</span>
+                    </div>
+                    <span class="donut-legend-pct">35%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top Selling Products (Image 1 middle card) -->
+            <div class="section-card">
+              <div class="section-header">
+                <h3 class="section-title">Top Selling Blends</h3>
+                <a href="javascript:void(0)" onclick="window.switchTab('products')" class="btn-secondary" style="font-size:11px;padding:3px 9px;">Manage Prices ↗</a>
+              </div>
+              <div class="top-products-list" id="topProductsList">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+
+      <!-- TAB 2: FULL ORDERS MANAGER -->
+      <main class="admin-content tab-content" id="tabOrders" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Orders Management</h2>
+            <p class="page-subtitle">Track, filter, update shipment states, and inspect checkout metadata</p>
+          </div>
+          <div class="header-actions">
+            <a href="/api/admin/export/orders.csv" class="btn-primary-admin" download>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </a>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="orders-filter-row" style="justify-content:space-between;">
+            <div class="status-filter-pills" id="fullOrdersStatusPills">
+              <span class="filter-pill active" onclick="window.filterFullOrders('all', this)">All</span>
+              <span class="filter-pill" onclick="window.filterFullOrders('pending', this)">Pending</span>
+              <span class="filter-pill" onclick="window.filterFullOrders('processing', this)">Processing</span>
+              <span class="filter-pill" onclick="window.filterFullOrders('shipped', this)">Shipped</span>
+              <span class="filter-pill" onclick="window.filterFullOrders('delivered', this)">Delivered</span>
+              <span class="filter-pill" onclick="window.filterFullOrders('cancelled', this)">Cancelled</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);" id="ordersTotalCount">Total: 0</div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Placed At</th>
+                  <th>Customer Info</th>
+                  <th>Phone / Email</th>
+                  <th>Products</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fullOrdersTbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <!-- TAB 3: PRODUCTS -->
+      <main class="admin-content tab-content" id="tabProducts" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Products &amp; Inventory</h2>
+            <p class="page-subtitle">Pure organic psyllium husk blend catalog &amp; live prices</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="productsCatalogGrid">
+          <!-- Blend 1: Chocolate -->
+          <div class="kpi-card emerald" style="padding:22px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+                <img src="/images/packages/chocolate%20pack.png" alt="Organic Chocolate" style="width:55px;height:55px;object-fit:contain;background:rgba(255,255,255,0.05);padding:4px;border-radius:10px;border:1px solid var(--border-subtle);">
+                <div style="flex:1;">
+                  <input type="text" id="prodTitle-chocolate" value="Organic Chocolate" class="form-input" style="padding:4px 8px;font-size:13px;font-weight:700;margin-bottom:4px;">
+                  <div style="font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;">SKU: chocolate</div>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:var(--radius-sm);margin-bottom:16px;border:1px solid var(--border-subtle);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Price (₹ INR):</label>
+                  <input type="number" id="prodPrice-chocolate" value="899" class="form-input" style="width:110px;padding:6px 10px;font-size:15px;font-weight:800;color:var(--accent-emerald);text-align:right;">
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Availability:</label>
+                  <select id="prodStock-chocolate" style="background:var(--bg-elevated);color:#fff;border:1px solid var(--border-light);padding:5px 10px;border-radius:var(--radius-sm);font-size:12px;outline:none;">
+                    <option value="1" selected>In Stock</option>
+                    <option value="0">Out of Stock</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-primary-admin" style="flex:1;justify-content:center;cursor:pointer;" onclick="window.saveProductPrice('chocolate')">
+                💾 Save Price
+              </button>
+              <button class="btn-secondary" style="cursor:pointer;" onclick="window.openPriceModal('chocolate')" title="Quick Modal Edit">
+                ✏️ Edit Modal
+              </button>
+            </div>
+          </div>
+
+          <!-- Blend 2: Pure Unflavored -->
+          <div class="kpi-card emerald" style="padding:22px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+                <img src="/images/packages/unflavored%20pack.png" alt="Pure Unflavored" style="width:55px;height:55px;object-fit:contain;background:rgba(255,255,255,0.05);padding:4px;border-radius:10px;border:1px solid var(--border-subtle);">
+                <div style="flex:1;">
+                  <input type="text" id="prodTitle-unflavored" value="Pure Unflavored" class="form-input" style="padding:4px 8px;font-size:13px;font-weight:700;margin-bottom:4px;">
+                  <div style="font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;">SKU: unflavored</div>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:var(--radius-sm);margin-bottom:16px;border:1px solid var(--border-subtle);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Price (₹ INR):</label>
+                  <input type="number" id="prodPrice-unflavored" value="749" class="form-input" style="width:110px;padding:6px 10px;font-size:15px;font-weight:800;color:var(--accent-emerald);text-align:right;">
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Availability:</label>
+                  <select id="prodStock-unflavored" style="background:var(--bg-elevated);color:#fff;border:1px solid var(--border-light);padding:5px 10px;border-radius:var(--radius-sm);font-size:12px;outline:none;">
+                    <option value="1" selected>In Stock</option>
+                    <option value="0">Out of Stock</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-primary-admin" style="flex:1;justify-content:center;cursor:pointer;" onclick="window.saveProductPrice('unflavored')">
+                💾 Save Price
+              </button>
+              <button class="btn-secondary" style="cursor:pointer;" onclick="window.openPriceModal('unflavored')" title="Quick Modal Edit">
+                ✏️ Edit Modal
+              </button>
+            </div>
+          </div>
+
+          <!-- Blend 3: Cheese Berry -->
+          <div class="kpi-card emerald" style="padding:22px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+                <img src="/images/packages/%27cheese%20berry%20pack.png" alt="Cheese Berry" style="width:55px;height:55px;object-fit:contain;background:rgba(255,255,255,0.05);padding:4px;border-radius:10px;border:1px solid var(--border-subtle);">
+                <div style="flex:1;">
+                  <input type="text" id="prodTitle-cheese-berry" value="Cheese Berry" class="form-input" style="padding:4px 8px;font-size:13px;font-weight:700;margin-bottom:4px;">
+                  <div style="font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;">SKU: cheese-berry</div>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:var(--radius-sm);margin-bottom:16px;border:1px solid var(--border-subtle);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Price (₹ INR):</label>
+                  <input type="number" id="prodPrice-cheese-berry" value="999" class="form-input" style="width:110px;padding:6px 10px;font-size:15px;font-weight:800;color:var(--accent-emerald);text-align:right;">
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Availability:</label>
+                  <select id="prodStock-cheese-berry" style="background:var(--bg-elevated);color:#fff;border:1px solid var(--border-light);padding:5px 10px;border-radius:var(--radius-sm);font-size:12px;outline:none;">
+                    <option value="1" selected>In Stock</option>
+                    <option value="0">Out of Stock</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-primary-admin" style="flex:1;justify-content:center;cursor:pointer;" onclick="window.saveProductPrice('cheese-berry')">
+                💾 Save Price
+              </button>
+              <button class="btn-secondary" style="cursor:pointer;" onclick="window.openPriceModal('cheese-berry')" title="Quick Modal Edit">
+                ✏️ Edit Modal
+              </button>
+            </div>
+          </div>
+
+          <!-- Blend 4: Honey Black Pepper -->
+          <div class="kpi-card emerald" style="padding:22px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+                <img src="/images/packages/Honey%20paper%20black%20pack.png" alt="Honey Black Pepper" style="width:55px;height:55px;object-fit:contain;background:rgba(255,255,255,0.05);padding:4px;border-radius:10px;border:1px solid var(--border-subtle);">
+                <div style="flex:1;">
+                  <input type="text" id="prodTitle-honey-black-pepper" value="Honey Black Pepper" class="form-input" style="padding:4px 8px;font-size:13px;font-weight:700;margin-bottom:4px;">
+                  <div style="font-size:11px;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;">SKU: honey-black-pepper</div>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:var(--radius-sm);margin-bottom:16px;border:1px solid var(--border-subtle);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Price (₹ INR):</label>
+                  <input type="number" id="prodPrice-honey-black-pepper" value="949" class="form-input" style="width:110px;padding:6px 10px;font-size:15px;font-weight:800;color:var(--accent-emerald);text-align:right;">
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <label style="font-size:11px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;">Availability:</label>
+                  <select id="prodStock-honey-black-pepper" style="background:var(--bg-elevated);color:#fff;border:1px solid var(--border-light);padding:5px 10px;border-radius:var(--radius-sm);font-size:12px;outline:none;">
+                    <option value="1" selected>In Stock</option>
+                    <option value="0">Out of Stock</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-primary-admin" style="flex:1;justify-content:center;cursor:pointer;" onclick="window.saveProductPrice('honey-black-pepper')">
+                💾 Save Price
+              </button>
+              <button class="btn-secondary" style="cursor:pointer;" onclick="window.openPriceModal('honey-black-pepper')" title="Quick Modal Edit">
+                ✏️ Edit Modal
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- TAB 4: CUSTOMERS -->
+      <main class="admin-content tab-content" id="tabCustomers" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Customers Directory</h2>
+            <p class="page-subtitle">Clients across India, order histories, and contact records</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Client Name</th>
+                  <th>Phone Number</th>
+                  <th>Email</th>
+                  <th>Delivery Address</th>
+                  <th>Joined</th>
+                  <th>Total Orders</th>
+                  <th>Total Spent</th>
+                </tr>
+              </thead>
+              <tbody id="customersTbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <!-- TAB 5: INQUIRIES & CONTACTS -->
+      <main class="admin-content tab-content" id="tabContacts" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Customer Inquiries</h2>
+            <p class="page-subtitle">Messages submitted via the store contact modal</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Sender</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Message Body</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="contactsTbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <!-- TAB 6: TELEMETRY HUD (Images 2, 3, 4) -->
+      <main class="admin-content tab-content" id="tabTelemetry" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Server Telemetry &amp; Diagnostics HUD</h2>
+            <p class="page-subtitle">Real-time Gunicorn/FastAPI process stats, memory footprint, and SQLite telemetry</p>
+          </div>
+          <button class="btn-secondary" onclick="window.fetchTelemetry()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Ping Telemetry
+          </button>
+        </div>
+
+        <div class="telemetry-grid">
+          <div class="hud-card">
+            <div class="hud-label">Worker Process Uptime</div>
+            <div class="hud-value" id="hudUptime">--</div>
+            <div class="hud-meta" id="hudPid">PID: --</div>
+          </div>
+          <div class="hud-card">
+            <div class="hud-label">Resident Memory (RSS)</div>
+            <div class="hud-value" id="hudMemory">-- MB</div>
+            <div class="hud-meta" id="hudRamPct">Sys RAM: --%</div>
+          </div>
+          <div class="hud-card">
+            <div class="hud-label">Database On Disk</div>
+            <div class="hud-value" id="hudDbSize">-- KB</div>
+            <div class="hud-meta">data/husk.db (WAL Mode)</div>
+          </div>
+          <div class="hud-card">
+            <div class="hud-label">Platform Core</div>
+            <div class="hud-value" style="font-size:16px;" id="hudPython">Python 3.13</div>
+            <div class="hud-meta" id="hudOs">Linux</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">Live Telemetry Terminal Stream</h3>
+            <span class="telemetry-pill"><span class="pulse-dot"></span> STREAM ACTIVE</span>
+          </div>
+          <div class="cyber-terminal" id="cyberTerminal">
+            <div class="terminal-line"><span class="ts">[00:00:01]</span> <span class="green">[SYSTEM INIT]</span> FastAPI ASGI engine loaded with Uvicorn &amp; Gunicorn 12-core bindings</div>
+            <div class="terminal-line"><span class="ts">[00:00:02]</span> <span class="cyan">[DATABASE]</span> SQLite WAL journal initialized at data/husk.db with pragma cache_size=-32000</div>
+            <div class="terminal-line"><span class="ts">[00:00:03]</span> <span class="green">[SECURITY]</span> HMAC-SHA256 authenticated admin session subsystem activated</div>
+            <div class="terminal-line"><span class="ts">[00:00:04]</span> <span class="amber">[CAPACITY]</span> Concurrency pool tuned for 20,000 concurrent sessions</div>
+          </div>
+        </div>
+      </main>
+
+      <!-- TAB 7: SETTINGS -->
+      <main class="admin-content tab-content" id="tabSettings" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Settings &amp; Credentials</h2>
+            <p class="page-subtitle">Server environment configuration and third-party integrations</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="section-card">
+            <h3 class="section-title" style="margin-bottom:16px;">System Configuration</h3>
+            <div class="order-detail-grid">
+              <div class="detail-block">
+                <div class="detail-block-label">Environment</div>
+                <div class="detail-block-value" id="settingsEnv">development</div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-block-label">Rate Limiting</div>
+                <div class="detail-block-value">100 req / minute</div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-block-label">Razorpay Gateway</div>
+                <div class="detail-block-value" id="settingsRzp">Checking...</div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-block-label">Email SMTP</div>
+                <div class="detail-block-value" id="settingsSmtp">Checking...</div>
+              </div>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:10px;">
+              To change settings, modify <code>.env</code> file in the project root and restart the server.
+            </p>
+          </div>
+
+          <div class="section-card">
+            <h3 class="section-title" style="margin-bottom:16px;">Admin Access Credentials</h3>
+            <p style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;">
+              Admin authentication is protected with timing-safe HMAC-SHA256 session signatures.
+            </p>
+            <div class="detail-block" style="margin-bottom:12px;">
+              <div class="detail-block-label">Default Username</div>
+              <div class="detail-block-value">admin</div>
+            </div>
+            <div class="detail-block" style="margin-bottom:16px;">
+              <div class="detail-block-label">Credentials Location</div>
+              <div class="detail-block-value">.env (ADMIN_USERNAME, ADMIN_PASSWORD)</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       ORDER DETAILS & CUSTOMIZATION MODAL
+       ====================================================================== -->
+  <div class="modal-backdrop" id="orderModal">
+    <div class="modal-panel" style="max-width:680px;">
+      <div class="modal-head">
+        <div>
+          <h4 class="modal-title" id="modalOrderId">Order #HK-XXXX</h4>
+          <span style="font-size:11px;color:var(--text-muted);" id="modalOrderDate">Date</span>
+        </div>
+        <button class="modal-close" onclick="window.closeOrderModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="font-size:12px;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:0.05em;">Order Customization</span>
+          <span class="telemetry-pill" style="font-size:10px;">EDIT MODE</span>
+        </div>
+
+        <div class="order-detail-grid">
+          <div class="detail-block">
+            <label class="detail-block-label" for="editCustName">Customer Name</label>
+            <input type="text" id="editCustName" class="form-input" style="padding:6px 10px;font-size:12px;margin-top:4px;">
+          </div>
+          <div class="detail-block">
+            <label class="detail-block-label" for="editCustPhone">Phone Number</label>
+            <input type="text" id="editCustPhone" class="form-input" style="padding:6px 10px;font-size:12px;margin-top:4px;">
+          </div>
+          <div class="detail-block">
+            <label class="detail-block-label" for="editCustEmail">Email Address</label>
+            <input type="email" id="editCustEmail" class="form-input" style="padding:6px 10px;font-size:12px;margin-top:4px;">
+          </div>
+          <div class="detail-block">
+            <label class="detail-block-label" for="editOrderStatus">Shipment Status</label>
+            <select id="editOrderStatus" style="width:100%;background:var(--bg-elevated);color:#fff;border:1px solid var(--border-light);padding:7px 10px;border-radius:var(--radius-sm);font-size:12px;margin-top:4px;outline:none;">
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="detail-block" style="margin-bottom:16px;">
+          <label class="detail-block-label" for="editCustAddress">Delivery Address</label>
+          <textarea id="editCustAddress" rows="2" class="form-input" style="padding:6px 10px;font-size:12px;margin-top:4px;resize:vertical;"></textarea>
+        </div>
+
+        <div class="detail-block" style="margin-bottom:16px;">
+          <div class="detail-block-label">Razorpay Reference ID</div>
+          <div class="detail-block-value" id="modalRzpId" style="font-family:'JetBrains Mono',monospace;font-size:11px;">None (Direct / COD)</div>
+        </div>
+
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:8px;">Purchased Items</div>
+        <div class="items-breakdown-list" id="modalItemsList">
+          <!-- Populated dynamically with item controls -->
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03);padding:14px;border-radius:var(--radius-sm);margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text-secondary);margin-bottom:8px;">
+            <span>Subtotal (₹)</span>
+            <strong id="modalSubtotal" style="color:#fff;">₹0</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text-secondary);margin-bottom:8px;">
+            <label for="editShippingFee" style="font-size:12px;">Shipping Fee (₹)</label>
+            <input type="number" id="editShippingFee" class="form-input" style="width:80px;padding:4px 8px;font-size:12px;text-align:right;" oninput="window.recalcModalGrandTotal()">
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:800;color:var(--accent-emerald);border-top:1px solid var(--border-subtle);padding-top:10px;">
+            <span>Grand Total (₹)</span>
+            <input type="number" id="editGrandTotal" class="form-input" style="width:110px;padding:5px 8px;font-size:14px;font-weight:800;color:var(--accent-emerald);text-align:right;">
+          </div>
+        </div>
+
+        <!-- Action bar -->
+        <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:12px;">
+          <button class="btn-secondary" onclick="window.closeOrderModal()">Cancel</button>
+          <button class="btn-primary-admin" onclick="window.saveOrderCustomization()">Save Customizations</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       ADMIN PROFILE & CHANGE PASSWORD MODAL
+       ====================================================================== -->
+  <div class="modal-backdrop" id="changePasswordModal">
+    <div class="modal-panel" style="max-width:440px;">
+      <div class="modal-head">
+        <div>
+          <h4 class="modal-title">Admin Profile: Shahrukh</h4>
+          <span style="font-size:11px;color:var(--text-muted);">Change Login Password</span>
+        </div>
+        <button class="modal-close" onclick="window.closeProfileModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="login-error" id="changePasswordError" style="margin-bottom:14px;"></div>
+
+        <form id="changePasswordForm" onsubmit="event.preventDefault(); window.submitChangePassword();">
+          <div class="form-group" style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <label for="currentPassword" style="margin-bottom:0;">Current Password</label>
+              <span style="font-size:11px;color:var(--accent-emerald);">Initial default is <strong>1404</strong></span>
+            </div>
+            <input type="password" id="currentPassword" class="form-input" style="padding-left:14px;" required placeholder="Enter current password (1404)">
+          </div>
+
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" class="form-input" style="padding-left:14px;" required placeholder="Enter new password">
+          </div>
+
+          <div class="form-group" style="margin-bottom:20px;">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="form-input" style="padding-left:14px;" required placeholder="Confirm new password">
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:10px;">
+            <button type="button" class="btn-secondary" onclick="window.closeProfileModal()">Cancel</button>
+            <button type="submit" class="btn-primary-admin" id="btnUpdatePassword">Update Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       PRODUCT PRICE & STOCK EDIT MODAL
+       ====================================================================== -->
+  <div class="modal-backdrop" id="editProductPriceModal">
+    <div class="modal-panel" style="max-width:460px;">
+      <div class="modal-head">
+        <div>
+          <h4 class="modal-title" id="priceModalTitle">Edit Product Price</h4>
+          <span style="font-size:11px;color:var(--text-muted);" id="priceModalSku">SKU: --</span>
+        </div>
+        <button class="modal-close" onclick="window.closePriceModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
+          <img id="priceModalImg" src="" alt="Product" style="width:60px;height:60px;object-fit:contain;background:rgba(255,255,255,0.05);padding:4px;border-radius:8px;">
+          <div>
+            <h4 id="priceModalName" style="font-size:15px;color:#fff;font-weight:700;">--</h4>
+            <span style="font-size:11px;color:var(--accent-emerald);">Live In-Store Catalogue</span>
+          </div>
+        </div>
+
+        <form onsubmit="event.preventDefault(); window.submitModalPriceChange();">
+          <input type="hidden" id="priceModalId" value="">
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="priceModalInput">Price in Indian Rupees (₹)</label>
+            <input type="number" id="priceModalInput" class="form-input" style="padding:10px 14px;font-size:16px;font-weight:800;color:var(--accent-emerald);" required min="1" placeholder="e.g. 899">
+          </div>
+
+          <div class="form-group" style="margin-bottom:24px;">
+            <label for="priceModalStock">Stock Status</label>
+            <select id="priceModalStock" style="width:100%;background:var(--bg-elevated);color:#fff;border:1px solid var(--border-light);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;outline:none;">
+              <option value="1">In Stock (Available for ordering)</option>
+              <option value="0">Out of Stock (Disabled in cart)</option>
+            </select>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:10px;">
+            <button type="button" class="btn-secondary" onclick="window.closePriceModal()">Cancel</button>
+            <button type="submit" class="btn-primary-admin" id="btnSaveModalPrice">Save Price &amp; Update Store</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-box" id="adminToast">
+    <span id="toastMsg">Action completed</span>
+  </div>
+
+  <script src="/admin/admin.js?v=20260911_v10"></script>
+</body>
+</html>

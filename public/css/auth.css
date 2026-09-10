@@ -1,0 +1,607 @@
+/* =============================================================
+   Husk & Co. — Modern Minimalist Auth UI (Web & Mobile)
+   Clean Split-Card Layout Inspired by Minimal Architecture & Warm Earth Tones
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg-canvas: #bfaea3;
+  --bg-card: #ffffff;
+  --primary-btn: #a67343;
+  --primary-btn-hover: #936235;
+  --primary-btn-active: #82542a;
+  --text-main: #191614;
+  --text-muted: #78716c;
+  --text-light: #a8a29e;
+  --border-input: #e7e5e4;
+  --bg-input: #fafaf9;
+  --bg-input-focus: #ffffff;
+  --radius-card: 42px;
+  --radius-inner: 32px;
+  --radius-pill: 32px;
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shadow-main: 0 30px 70px -15px rgba(60, 45, 35, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.4);
+  --shadow-btn: 0 10px 24px rgba(166, 115, 67, 0.28);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-canvas);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at 85% 85%, rgba(135, 105, 85, 0.2) 0%, transparent 60%);
+}
+
+/* Back to Home Link */
+.nav-home-back {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+.nav-home-back:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateX(-2px);
+}
+
+/* =============================================================
+   MAIN TWO-COLUMN CARD CONTAINER
+   ============================================================= */
+.auth-split-card {
+  width: 100%;
+  max-width: 1080px;
+  min-height: 660px;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-main);
+  display: flex;
+  padding: 22px;
+  gap: 24px;
+  position: relative;
+  z-index: 10;
+  animation: cardFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =============================================================
+   LEFT COLUMN: FORM AREA
+   ============================================================= */
+.auth-form-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 40px;
+  min-width: 0;
+}
+
+.auth-form-inner {
+  width: 100%;
+  max-width: 370px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Emoji / Emblem */
+.auth-brand-emblem {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 12px;
+  user-select: none;
+  display: inline-block;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-title {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.6px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Alert Notification */
+.auth-alert-box {
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 18px;
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+
+.auth-alert-box.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.auth-alert-box.success {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Form & Input Groups */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.pill-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.pill-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-input);
+  border-radius: var(--radius-pill);
+  padding: 14px 46px 14px 22px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.pill-input::placeholder {
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.pill-input:focus {
+  background: var(--bg-input-focus);
+  border-color: var(--primary-btn);
+  box-shadow: 0 0 0 3.5px rgba(166, 115, 67, 0.12);
+}
+
+.pill-input-icon {
+  position: absolute;
+  right: 18px;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.pill-input-icon.interactive {
+  pointer-events: auto;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 2px;
+}
+
+.pill-input-icon.interactive:hover {
+  color: var(--primary-btn);
+}
+
+.pill-input:focus ~ .pill-input-icon {
+  color: var(--primary-btn);
+}
+
+/* Row: Remember me & Forgot Password */
+.auth-remember-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 4px 10px 4px;
+  font-size: 12.5px;
+}
+
+.checkbox-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 500;
+  user-select: none;
+}
+
+.checkbox-remember input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  accent-color: var(--primary-btn);
+  cursor: pointer;
+}
+
+.link-forgot {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 12px;
+  transition: color 0.2s ease;
+}
+
+.link-forgot:hover {
+  color: var(--primary-btn);
+  text-decoration: underline;
+}
+
+/* Primary Caramel / Terracotta Pill Button */
+.btn-terracotta-pill {
+  width: 100%;
+  padding: 14.5px 24px;
+  background: var(--primary-btn);
+  border: none;
+  border-radius: var(--radius-pill);
+  color: #ffffff;
+  font-size: 15.5px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  box-shadow: var(--shadow-btn);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.btn-terracotta-pill:hover {
+  background: var(--primary-btn-hover);
+  transform: translateY(-1.5px);
+  box-shadow: 0 14px 28px rgba(166, 115, 67, 0.36);
+}
+
+.btn-terracotta-pill:active {
+  background: var(--primary-btn-active);
+  transform: translateY(0);
+}
+
+.btn-terracotta-pill:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Social Login Divider */
+.auth-social-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0 16px 0;
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.auth-social-divider::before,
+.auth-social-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #edebe9;
+}
+
+/* Social Circles Row */
+.auth-social-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.btn-social-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-input);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #191614;
+}
+
+.btn-social-circle:hover {
+  border-color: #d6d3d1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+}
+
+/* Footer Toggle Link */
+.auth-switch-footer {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-top: auto;
+}
+
+.auth-switch-footer a {
+  color: var(--primary-btn);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth-switch-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Optional Address Collapsible for Register View */
+.register-address-toggle {
+  background: none;
+  border: none;
+  color: var(--primary-btn);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  padding: 2px 6px;
+  margin-top: -2px;
+}
+
+.register-address-toggle:hover {
+  text-decoration: underline;
+}
+
+.register-address-fields {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: #fbf9f8;
+  border-radius: 18px;
+  border: 1px dashed #e2dedb;
+}
+
+.register-address-fields.open {
+  display: flex;
+}
+
+/* =============================================================
+   RIGHT COLUMN: LUXURY MINIMAL EDITORIAL SHOWCASE
+   ============================================================= */
+.auth-visual-column {
+  flex: 1.05;
+  background: radial-gradient(circle at 50% 35%, #f2e5dc 0%, #e8d5c7 50%, #d8bead 100%);
+  border-radius: var(--radius-inner);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 44px 36px 36px 36px;
+  min-height: 580px;
+}
+
+/* Subtle Architectural Texture and Shadow */
+.auth-visual-column::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at top right, rgba(255, 255, 255, 0.4) 0%, transparent 70%),
+    radial-gradient(ellipse at bottom left, rgba(120, 85, 65, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Brand Showcase Content */
+.visual-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.visual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #7c4d26;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  margin-bottom: 12px;
+}
+
+.visual-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #3b2a1e;
+  letter-spacing: -0.4px;
+  margin-bottom: 6px;
+}
+
+.visual-subtitle {
+  font-size: 13.5px;
+  color: #7d6554;
+  max-width: 320px;
+  line-height: 1.45;
+}
+
+/* Product Showcase Pedestal */
+.visual-centerpiece {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.visual-product-img {
+  width: 220px;
+  height: 250px;
+  object-fit: contain;
+  filter: drop-shadow(0 25px 35px rgba(60, 40, 30, 0.28));
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: floatProduct 5s ease-in-out infinite alternate;
+}
+
+@keyframes floatProduct {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-8px) rotate(1.5deg);
+  }
+}
+
+.visual-footer-stats {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 12px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: #402c1f;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: #8c7362;
+  font-weight: 600;
+}
+
+/* =============================================================
+   RESPONSIVE LAYOUT (WEB & MOBILE)
+   ============================================================= */
+
+/* Tablet & Mobile Screens */
+@media (max-width: 900px) {
+  body {
+    padding: 20px 14px;
+  }
+
+  .nav-home-back {
+    top: 14px;
+    left: 16px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .auth-split-card {
+    flex-direction: column;
+    padding: 28px 20px;
+    border-radius: 32px;
+    max-width: 480px;
+    min-height: auto;
+    gap: 20px;
+  }
+
+  .auth-form-column {
+    padding: 10px 6px;
+  }
+
+  .auth-title {
+    font-size: 26px;
+  }
+
+  .auth-visual-column {
+    display: none; /* Focus directly on pristine login card on mobile like native app */
+  }
+}
+
+@media (max-width: 420px) {
+  body {
+    padding: 12px 8px;
+  }
+
+  .auth-split-card {
+    border-radius: 26px;
+    padding: 24px 16px;
+  }
+
+  .auth-title {
+    font-size: 24px;
+  }
+
+  .pill-input {
+    padding: 13px 42px 13px 18px;
+    font-size: 14px;
+  }
+}
+
+/* Utility classes */
+.hidden-pane {
+  display: none !important;
+}

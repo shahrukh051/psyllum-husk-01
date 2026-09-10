@@ -37,6 +37,11 @@ class Settings(BaseSettings):
     razorpay_key_id: str = ""
     razorpay_key_secret: str = ""
 
+    # Admin Panel
+    admin_username: str = "shahrukh"
+    admin_password: str = "1404"
+    admin_secret_key: str = "husk-co-luxury-wellness-admin-secret-2026"
+
     @property
     def is_production(self) -> bool:
         return self.environment.lower() == "production"

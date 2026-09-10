@@ -19,14 +19,38 @@ from backend.services.razorpay_service import create_razorpay_order
 log = logging.getLogger(__name__)
 router = APIRouter()
 
-# ── Product catalogue (single source of truth — never trust client prices) ──
+# ── Default Fallback Product catalogue ──────────────────────────
 
 PRODUCTS: dict[str, dict] = {
-    "chocolate":          {"name": "Chocolate",          "price": 899},
-    "unflavored":         {"name": "Unflavored",          "price": 749},
-    "cheese-berry":       {"name": "Cheese Berry",        "price": 999},
-    "honey-black-pepper": {"name": "Honey Black Pepper",  "price": 949},
+    "chocolate":          {"name": "Organic Chocolate",   "price": 899, "in_stock": True},
+    "unflavored":         {"name": "Pure Unflavored",     "price": 749, "in_stock": True},
+    "cheese-berry":       {"name": "Cheese Berry",        "price": 999, "in_stock": True},
+    "honey-black-pepper": {"name": "Honey Black Pepper",  "price": 949, "in_stock": True},
 }
+
+
+async def get_live_products(db: aiosqlite.Connection) -> dict[str, dict]:
+    """Fetches live prices & in-stock status from DB, falls back to defaults."""
+    products = {}
+    try:
+        async with db.execute("SELECT id, name, price, in_stock, image FROM products") as cur:
+            async for row in cur:
+                products[row[0]] = {
+                    "name": row[1],
+                    "price": row[2],
+                    "in_stock": bool(row[3]),
+                    "image": row[4] or "",
+                }
+    except Exception:
+        pass
+    return products if products else PRODUCTS
+
+
+@router.get("/api/products")
+async def list_public_products(db: aiosqlite.Connection = Depends(get_db)):
+    """Public endpoint returning live product prices & availability."""
+    products = await get_live_products(db)
+    return {"products": products}
 
 
 def _generate_order_id() -> str:
@@ -43,22 +67,29 @@ async def place_order(
     """
     Place a new order.
 
-    - Validates every product ID server-side (rejects unknown products)
-    - Recomputes prices (never trusts client-sent amounts)
+    - Validates every product ID server-side against DB prices
+    - Recomputes prices dynamically (never trusts client-sent amounts)
     - Applies free-shipping rule (3+ pouches)
     - Creates Razorpay payment order if keys are configured
     - Sends HTML order confirmation email if SMTP is configured
     - Persists to SQLite
     """
+    live_products = await get_live_products(db)
+
     # ── Validate & resolve items ──────────────────────────────
     resolved: list[OrderedItem] = []
     for item in body.items:
-        product = PRODUCTS.get(item.id)
+        product = live_products.get(item.id)
         if not product:
             raise HTTPException(
                 status_code=400,
                 detail=f"Unknown product: '{item.id}'. "
-                       f"Valid products are: {', '.join(PRODUCTS)}",
+                       f"Valid products are: {', '.join(live_products)}",
+            )
+        if not product.get("in_stock", True):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Product '{product['name']}' is currently out of stock.",
             )
         resolved.append(OrderedItem(
             id=item.id,

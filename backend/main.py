@@ -28,7 +28,7 @@ from slowapi.util import get_remote_address
 
 from backend.config import get_settings
 from backend.database import init_db
-from backend.routers import contact, orders
+from backend.routers import admin, auth, contact, orders
 
 # ── Logging ───────────────────────────────────────────────────
 logging.basicConfig(
@@ -90,9 +90,12 @@ async def security_headers(request: Request, call_next):
     if settings.is_production:
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
 
-    # Cache-Control: immutable for assets, no-cache for HTML
+    # Cache-Control: no-cache for admin, immutable for public assets, no-cache for HTML
     path = request.url.path
-    if any(path.endswith(ext) for ext in (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".ico", ".woff", ".woff2")):
+    if path.startswith("/admin") or path.startswith("/api/admin"):
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+    elif any(path.endswith(ext) for ext in (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".ico", ".woff", ".woff2")):
         response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
     elif path.endswith(".html") or path == "/":
         response.headers["Cache-Control"] = "no-cache, must-revalidate"
@@ -101,6 +104,8 @@ async def security_headers(request: Request, call_next):
 
 
 # ── API routers ───────────────────────────────────────────────
+app.include_router(admin.router)
+app.include_router(auth.router)
 app.include_router(orders.router)
 app.include_router(contact.router)
 
@@ -112,8 +117,40 @@ async def health(request: Request):
     return {"status": "ok", "env": settings.environment, "pid": os.getpid()}
 
 
-# ── Static file serving ───────────────────────────────────────
+# ── Customer Auth Page (/login, /register, /account) ──────────
+@app.get("/login", include_in_schema=False)
+@app.get("/register", include_in_schema=False)
+@app.get("/account", include_in_schema=False)
+async def serve_auth_page():
+    login_file = PUBLIC_DIR / "login.html"
+    if login_file.exists():
+        return FileResponse(
+            str(login_file),
+            headers={"Cache-Control": "no-cache, must-revalidate"},
+        )
+    return JSONResponse({"error": "Auth portal not found"}, status_code=404)
+
+
+# ── Static file serving & Admin Panel ─────────────────────────
 PUBLIC_DIR = Path(__file__).parent.parent / "public"
+
+@app.get("/admin", include_in_schema=False)
+@app.get("/admin/{subpath:path}", include_in_schema=False)
+async def serve_admin(subpath: str = ""):
+    # If a static file inside /admin exists (e.g. admin.css, admin.js)
+    admin_no_cache = {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "Pragma": "no-cache",
+        "Expires": "0",
+    }
+    if subpath:
+        asset = PUBLIC_DIR / "admin" / subpath
+        if asset.is_file():
+            return FileResponse(str(asset), headers=admin_no_cache)
+    admin_index = PUBLIC_DIR / "admin" / "index.html"
+    if admin_index.exists():
+        return FileResponse(str(admin_index), headers=admin_no_cache)
+    return JSONResponse({"error": "Admin portal not found"}, status_code=404)
 
 app.mount(
     "/",

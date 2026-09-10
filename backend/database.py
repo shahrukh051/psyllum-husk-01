@@ -58,11 +58,59 @@ async def init_db() -> None:
                 created_at TEXT NOT NULL DEFAULT (datetime('now'))
             );
 
+            CREATE TABLE IF NOT EXISTS products (
+                id         TEXT PRIMARY KEY,
+                name       TEXT NOT NULL,
+                price      INTEGER NOT NULL,
+                in_stock   INTEGER NOT NULL DEFAULT 1,
+                image      TEXT,
+                updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
+            CREATE TABLE IF NOT EXISTS admin_config (
+                key        TEXT PRIMARY KEY,
+                value      TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS users (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                name          TEXT NOT NULL,
+                email         TEXT UNIQUE NOT NULL,
+                phone         TEXT,
+                password_hash TEXT NOT NULL,
+                address       TEXT,
+                city          TEXT,
+                pincode       TEXT,
+                created_at    TEXT NOT NULL DEFAULT (datetime('now')),
+                last_login    TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
             CREATE INDEX IF NOT EXISTS idx_orders_order_id
                 ON orders(order_id);
             CREATE INDEX IF NOT EXISTS idx_orders_status
                 ON orders(status);
             CREATE INDEX IF NOT EXISTS idx_contacts_email
                 ON contacts(email);
+            CREATE INDEX IF NOT EXISTS idx_users_email
+                ON users(email);
+            CREATE INDEX IF NOT EXISTS idx_users_phone
+                ON users(phone);
         """)
+
+        # Insert default products if table is empty
+        async with db.execute("SELECT count(*) FROM products") as cur:
+            count = (await cur.fetchone())[0]
+            if count == 0:
+                await db.executemany(
+                    """
+                    INSERT INTO products (id, name, price, in_stock, image)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    [
+                        ("chocolate", "Organic Chocolate", 899, 1, "/images/packages/chocolate%20pack.png"),
+                        ("unflavored", "Pure Unflavored", 749, 1, "/images/packages/unflavored%20pack.png"),
+                        ("cheese-berry", "Cheese Berry", 999, 1, "/images/packages/%27cheese%20berry%20pack.png"),
+                        ("honey-black-pepper", "Honey Black Pepper", 949, 1, "/images/packages/Honey%20paper%20black%20pack.png"),
+                    ],
+                )
         await db.commit()
