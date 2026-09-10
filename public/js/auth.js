@@ -125,7 +125,14 @@
             body: JSON.stringify({ email, password, remember_me: remember }),
           });
 
-          const data = await res.json();
+          let data;
+          const text = await res.text();
+          try {
+            data = JSON.parse(text);
+          } catch (_) {
+            data = { detail: `Server returned ${res.status}. Please try again.` };
+          }
+
           if (res.ok && data.success) {
             localStorage.setItem('husk_customer_jwt', data.token);
             localStorage.setItem('husk_customer_name', data.user.name);
@@ -138,6 +145,7 @@
             showAlert(alertBox, data.detail || 'Invalid email or password.', 'error');
           }
         } catch (err) {
+          console.error('Login error:', err);
           showAlert(alertBox, 'Network connection error. Please try again.', 'error');
         } finally {
           btn.textContent = 'Login';
@@ -190,7 +198,14 @@
             }),
           });
 
-          const data = await res.json();
+          let data;
+          const text = await res.text();
+          try {
+            data = JSON.parse(text);
+          } catch (_) {
+            data = { detail: `Server returned ${res.status}. Please try again.` };
+          }
+
           if (res.ok && data.success) {
             localStorage.setItem('husk_customer_jwt', data.token);
             localStorage.setItem('husk_customer_name', data.user.name);
@@ -203,7 +218,8 @@
             showAlert(alertBox, data.detail || 'Could not register account.', 'error');
           }
         } catch (err) {
-          showAlert(alertBox, 'Network error during registration.', 'error');
+          console.error('Registration error:', err);
+          showAlert(alertBox, 'Unable to reach server. Please try again.', 'error');
         } finally {
           btn.textContent = 'Create Account';
           btn.disabled = false;
