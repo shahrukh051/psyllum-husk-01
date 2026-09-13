@@ -8,6 +8,19 @@
 (function () {
   'use strict';
 
+  // ── HTML Escaping ──────────────────────────────────────────────
+  // Prevents stored XSS: any user-supplied field rendered via innerHTML
+  // must pass through this before interpolation.
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   // State — session lives in the httponly cookie the server sets;
   // nothing token-related is kept in JS-accessible storage.
   let dashboardData = null;
@@ -761,10 +774,10 @@
           <td style="color:var(--text-secondary);font-size:11px;">${dateStr}</td>
           <td>
             <div class="customer-cell">
-              <div class="customer-mini-avatar">${o.customer_name ? o.customer_name.charAt(0) : 'C'}</div>
+              <div class="customer-mini-avatar">${o.customer_name ? escapeHtml(o.customer_name.charAt(0)) : 'C'}</div>
               <div>
-                <div style="font-weight:600;">${o.customer_name}</div>
-                <div style="font-size:10.5px;color:var(--text-muted);">${o.customer_phone}</div>
+                <div style="font-weight:600;">${escapeHtml(o.customer_name)}</div>
+                <div style="font-size:10.5px;color:var(--text-muted);">${escapeHtml(o.customer_phone)}</div>
               </div>
             </div>
           </td>
@@ -826,8 +839,8 @@
         <tr onclick="window.openOrderModal('${o.order_id}')">
           <td class="order-id-cell">#${o.order_id}</td>
           <td style="color:var(--text-secondary);font-size:11px;">${formatOrderDate(o.created_at)}</td>
-          <td style="font-weight:600;">${o.customer_name}</td>
-          <td style="font-size:11px;color:var(--text-secondary);">${o.customer_phone}</td>
+          <td style="font-weight:600;">${escapeHtml(o.customer_name)}</td>
+          <td style="font-size:11px;color:var(--text-secondary);">${escapeHtml(o.customer_phone)}</td>
           <td style="font-size:11px;color:var(--text-muted);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${itemsSummary}</td>
           <td><span class="status-badge ${o.status}">${o.status}</span></td>
           <td style="font-weight:700;">₹${o.grand_total.toLocaleString('en-IN')}</td>
@@ -1041,13 +1054,13 @@
           return `
           <tr>
             <td>
-              <div style="font-weight:700;color:#fff;">${c.name}</div>
+              <div style="font-weight:700;color:#fff;">${escapeHtml(c.name)}</div>
               <span class="status-badge ${badgeClass}" style="font-size:10px;padding:2px 8px;margin-top:4px;display:inline-block;">${c.type}</span>
             </td>
-            <td style="font-family:'JetBrains Mono', monospace;font-size:12px;color:var(--accent-cyan);">${c.phone}</td>
-            <td style="color:var(--text-secondary);font-size:12px;">${c.email}</td>
-            <td style="color:var(--text-muted);font-size:11.5px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${c.address}">
-              ${c.address}
+            <td style="font-family:'JetBrains Mono', monospace;font-size:12px;color:var(--accent-cyan);">${escapeHtml(c.phone)}</td>
+            <td style="color:var(--text-secondary);font-size:12px;">${escapeHtml(c.email)}</td>
+            <td style="color:var(--text-muted);font-size:11.5px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(c.address)}">
+              ${escapeHtml(c.address)}
             </td>
             <td style="color:var(--text-muted);font-size:11px;">${c.joined}</td>
             <td style="text-align:center;"><span class="status-badge processing">${c.ordersCount}</span></td>
@@ -1085,10 +1098,10 @@
           return `
           <tr>
             <td style="font-size:11px;color:var(--text-muted);">${formatOrderDate(c.created_at)}</td>
-            <td style="font-weight:600;">${c.name}</td>
-            <td style="font-size:11px;color:var(--accent-cyan);">${c.email}</td>
-            <td style="font-weight:500;">${c.subject}</td>
-            <td style="font-size:11.5px;color:var(--text-secondary);max-width:250px;">${c.message || '--'}</td>
+            <td style="font-weight:600;">${escapeHtml(c.name)}</td>
+            <td style="font-size:11px;color:var(--accent-cyan);">${escapeHtml(c.email)}</td>
+            <td style="font-weight:500;">${escapeHtml(c.subject)}</td>
+            <td style="font-size:11.5px;color:var(--text-secondary);max-width:250px;">${escapeHtml(c.message) || '--'}</td>
             <td>
               <button class="table-btn" onclick="window.deleteContactMessage(${c.id})">Delete</button>
             </td>
