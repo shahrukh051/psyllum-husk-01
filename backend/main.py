@@ -111,7 +111,10 @@ async def security_headers(request: Request, call_next):
         response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         response.headers["Pragma"] = "no-cache"
     elif any(path.endswith(ext) for ext in (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".ico", ".woff", ".woff2")):
-        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        if settings.is_production:
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        else:
+            response.headers["Cache-Control"] = "no-cache, must-revalidate"
     elif path.endswith(".html") or path == "/":
         response.headers["Cache-Control"] = "no-cache, must-revalidate"
 
