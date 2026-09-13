@@ -8,8 +8,8 @@
 (function () {
   'use strict';
 
-  // State
-  let currentToken = localStorage.getItem('husk_admin_jwt') || '';
+  // State — session lives in the httponly cookie the server sets;
+  // nothing token-related is kept in JS-accessible storage.
   let dashboardData = null;
   let allOrders = [];
   let currentProducts = [];
@@ -59,11 +59,9 @@
   }
 
   function getAuthHeaders() {
-    const headers = { 'Content-Type': 'application/json' };
-    if (currentToken) {
-      headers['Authorization'] = `Bearer ${currentToken}`;
-    }
-    return headers;
+    // The husk_admin_token cookie (httponly, set by the server) is sent
+    // automatically on same-origin requests — no Authorization header needed.
+    return { 'Content-Type': 'application/json' };
   }
 
   function showDashboard(username) {
@@ -114,8 +112,6 @@
 
       const data = await res.json();
       if (res.ok && data.success) {
-        currentToken = data.token;
-        localStorage.setItem('husk_admin_jwt', data.token);
         showToast(`Welcome back, ${data.username}!`, 'success');
         showDashboard(data.username);
       } else {
@@ -138,8 +134,6 @@
         headers: getAuthHeaders(),
       });
     } catch (e) {}
-    currentToken = '';
-    localStorage.removeItem('husk_admin_jwt');
     showToast('Signed out successfully.');
     showLoginScreen();
   };
@@ -202,10 +196,6 @@
 
       const data = await res.json();
       if (res.ok && data.success) {
-        if (data.token) {
-          currentToken = data.token;
-          localStorage.setItem('husk_admin_jwt', data.token);
-        }
         window.closeProfileModal();
         showToast('Password changed successfully!', 'success');
       } else {

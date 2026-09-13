@@ -134,9 +134,6 @@
           }
 
           if (res.ok && data.success) {
-            localStorage.setItem('husk_customer_jwt', data.token);
-            localStorage.setItem('husk_customer_name', data.user.name);
-            localStorage.setItem('husk_customer_email', data.user.email);
             showAlert(alertBox, `Welcome back, ${data.user.name}! Redirecting...`, 'success');
             setTimeout(() => {
               window.location.href = urlParams.get('redirect') || '/';
@@ -207,9 +204,6 @@
           }
 
           if (res.ok && data.success) {
-            localStorage.setItem('husk_customer_jwt', data.token);
-            localStorage.setItem('husk_customer_name', data.user.name);
-            localStorage.setItem('husk_customer_email', data.user.email);
             showAlert(alertBox, `Account created for ${data.user.name}! Welcome to Husk & Co. Redirecting...`, 'success');
             setTimeout(() => {
               window.location.href = urlParams.get('redirect') || '/';
@@ -230,13 +224,10 @@
 
   // ── Session Check ────────────────────────────────────────────
   async function checkExistingSession() {
-    const token = localStorage.getItem('husk_customer_jwt');
-    if (!token) return;
-
+    // husk_customer_token cookie (httponly) is sent automatically on
+    // same-origin requests, so just ask the server who's logged in.
     try {
-      const res = await fetch('/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch('/api/auth/me');
       if (res.ok) {
         const user = await res.json();
         const loginAlert = document.getElementById('loginAlert');

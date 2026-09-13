@@ -41,14 +41,28 @@ class Settings(BaseSettings):
     razorpay_key_id: str = ""
     razorpay_key_secret: str = ""
 
-    # Admin Panel
-    admin_username: str = "shahrukh"
-    admin_password: str = "1404"
-    admin_secret_key: str = "husk-co-luxury-wellness-admin-secret-2026"
+    # Admin Panel — required, no insecure fallback. App will fail to boot
+    # if these aren't set via environment variables / .env.
+    admin_username: str
+    admin_password: str
+    admin_secret_key: str
+
+    # Customer session signing key — intentionally SEPARATE from
+    # admin_secret_key, so a bug in the customer-token code path can
+    # never produce a token that verifies as an admin token.
+    customer_secret_key: str
+
+    # CORS — comma-separated list of allowed origins, e.g.
+    # "https://huskandco.in,https://psyllum-husk-01.onrender.com"
+    allowed_origins: str = ""
 
     @property
     def is_production(self) -> bool:
         return self.environment.lower() == "production"
+
+    @property
+    def cors_origins(self) -> list[str]:
+        return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
 
     @property
     def email_enabled(self) -> bool:

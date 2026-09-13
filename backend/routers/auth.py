@@ -16,6 +16,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 
 from backend.config import get_settings
 from backend.database import get_db
+from backend.limiter import limiter
 from backend.models import (
     UserAuthResponse,
     UserLoginRequest,
@@ -62,7 +63,7 @@ def create_user_token(user_id: int, email: str, name: str) -> str:
     payload_b64 = base64.urlsafe_b64encode(raw_payload).rstrip(b"=").decode("ascii")
 
     sig = hmac.new(
-        key=settings.admin_secret_key.encode("utf-8"),
+        key=settings.customer_secret_key.encode("utf-8"),
         msg=payload_b64.encode("utf-8"),
         digestmod=hashlib.sha256,
     ).digest()
@@ -86,7 +87,7 @@ def verify_user_token(token: str) -> dict[str, Any] | None:
             sig_b64 += "=" * sig_padding
 
         expected_sig = hmac.new(
-            key=settings.admin_secret_key.encode("utf-8"),
+            key=settings.customer_secret_key.encode("utf-8"),
             msg=payload_b64.rstrip("=").encode("utf-8"),
             digestmod=hashlib.sha256,
         ).digest()
@@ -228,7 +229,9 @@ async def register_user(
 # ── Customer Login ───────────────────────────────────────────
 
 @router.post("/login", response_model=UserAuthResponse)
+@limiter.limit("5/minute")
 async def login_user(
+    request: Request,
     body: UserLoginRequest,
     response: Response,
     db: aiosqlite.Connection = Depends(get_db),

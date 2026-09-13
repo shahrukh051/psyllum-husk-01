@@ -29,6 +29,7 @@ from slowapi.util import get_remote_address
 
 from backend.config import get_settings
 from backend.database import init_db
+from backend.limiter import limiter
 from backend.routers import admin, auth, contact, orders
 
 # ── Paths ─────────────────────────────────────────────────────
@@ -56,28 +57,27 @@ async def lifespan(app: FastAPI):
 
 # ── Rate limiter ──────────────────────────────────────────────
 settings = get_settings()
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=[f"{settings.rate_limit_max}/minute"],
-)
 
 # ── FastAPI app ───────────────────────────────────────────────
 app = FastAPI(
     title="Husk & Co. API",
     description="Backend API for Husk & Co. Pure Botanical Wellness",
     version="2.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url=None if settings.is_production else "/docs",
+    redoc_url=None if settings.is_production else "/redoc",
+    openapi_url=None if settings.is_production else "/openapi.json",
     lifespan=lifespan,
     redirect_slashes=False,
 )
 
 # ── Middleware ────────────────────────────────────────────────
 
-# CORS (Cross-Origin Resource Sharing)
+# CORS (Cross-Origin Resource Sharing) — explicit origins only.
+# allow_origins=["*"] + allow_credentials=True lets any website make
+# credentialed requests against this API; never combine those two.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins or ["https://psyllum-husk-01.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

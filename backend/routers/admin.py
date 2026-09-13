@@ -9,7 +9,6 @@ import io
 import json
 import os
 import platform
-import re
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -20,11 +19,12 @@ try:
     import psutil
 except ImportError:
     psutil = None
-from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, Field
 
 from backend.config import get_settings
 from backend.database import get_db
+from backend.limiter import limiter
 from backend.services.auth_service import (
     create_admin_token,
     get_current_admin,
@@ -70,7 +70,8 @@ class CustomizeOrderRequest(BaseModel):
 # ── Authentication Endpoints ──────────────────────────────────
 
 @router.post("/login")
-async def admin_login(body: LoginRequest, response: Response, db: aiosqlite.Connection = Depends(get_db)):
+@limiter.limit("5/minute")
+async def admin_login(request: Request, body: LoginRequest, response: Response, db: aiosqlite.Connection = Depends(get_db)):
     """Authenticates administrator and issues secure session token/cookie."""
     if not await verify_admin_credentials(body.username, body.password, db):
         raise HTTPException(
@@ -135,19 +136,10 @@ async def change_admin_password(
     # Persist in SQLite
     await update_admin_password(body.new_password, db)
 
-    # Also update .env file if it exists
-    env_path = Path(".env")
-    if env_path.exists():
-        try:
-            content = env_path.read_text(encoding="utf-8")
-            content = re.sub(r"^ADMIN_PASSWORD=.*$", f"ADMIN_PASSWORD={body.new_password}", content, flags=re.MULTILINE)
-            env_path.write_text(content, encoding="utf-8")
-        except Exception:
-            pass
-
-    # Issue fresh token
-    new_token = create_admin_token("shahrukh")
+    # Issue fresh token using the authenticated admin's username
     settings = get_settings()
+    username = admin.get("sub", settings.admin_username)
+    new_token = create_admin_token(username)
     response.set_cookie(
         key="husk_admin_token",
         value=new_token,
