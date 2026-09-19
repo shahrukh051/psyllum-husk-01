@@ -55,6 +55,7 @@ class Settings(BaseSettings):
 
     # CORS — comma-separated list of allowed origins, e.g.
     # "https://huskandco.in,https://psyllum-husk-01.onrender.com"
+    # Trailing spaces are stripped in cors_origins property below
     allowed_origins: str = ""
 
     @property
