@@ -180,7 +180,7 @@ if not os.environ.get("VERCEL") and PUBLIC_DIR.is_dir():
 # ── SPA fallback: unknown routes → index.html ─────────────────
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
-    # API misses → JSON 404
+    # API misses → JSON 404 so clients can parse the error programmatically
     if request.url.path.startswith("/api/"):
         return JSONResponse({"error": "Not found"}, status_code=404)
     # Everything else → serve index.html (SPA mode)
