@@ -25,6 +25,7 @@ async def get_db() -> aiosqlite.Connection:
             await db.execute("PRAGMA cache_size=-32000")
         else:
             await db.execute("PRAGMA journal_mode=DELETE")
+        # SQLite disables FK enforcement by default; must be re-enabled per connection
         await db.execute("PRAGMA foreign_keys=ON")
         yield db
 
