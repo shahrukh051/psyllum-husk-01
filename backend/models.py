@@ -10,6 +10,7 @@ from pydantic import BaseModel, EmailStr, Field, field_validator
 
 # ── Shared ────────────────────────────────────────────────────
 
+# Matches 10-digit Indian mobile numbers starting with 6–9 (Airtel/Jio/BSNL range)
 INDIAN_PHONE_RE = re.compile(r"^[6-9]\d{9}$")
 
 
