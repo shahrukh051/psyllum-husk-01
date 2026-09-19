@@ -83,7 +83,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# GZip compression (minimum 1KB)
+# GZip compression (minimum 1KB — smaller payloads cost more to compress than to send raw)
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 
 # Rate limiting error handler
