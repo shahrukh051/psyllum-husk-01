@@ -18,6 +18,7 @@ async def get_db() -> aiosqlite.Connection:
 
     async with aiosqlite.connect(str(db_path)) as db:
         db.row_factory = aiosqlite.Row
+        # WAL mode improves read concurrency; Vercel's read-only FS requires DELETE mode
         if not os.environ.get("VERCEL"):
             await db.execute("PRAGMA journal_mode=WAL")
             await db.execute("PRAGMA synchronous=NORMAL")
