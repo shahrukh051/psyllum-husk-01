@@ -54,6 +54,7 @@ class OrderResponse(BaseModel):
     subtotal:          int
     shipping:          int
     grand_total:       int
+    # razorpay_order_id is None when Razorpay keys are not configured (COD / test mode)
     razorpay_order_id: str | None = None
     message:           str
 
