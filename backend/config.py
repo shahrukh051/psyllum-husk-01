@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     debug: bool = False
     port: int = 3000
     host: str = "0.0.0.0"
+    # Gunicorn forks one Uvicorn worker per logical CPU by default; override via env
     workers: int = 12
 
     # Rate limiting
