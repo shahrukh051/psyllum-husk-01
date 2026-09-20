@@ -102,7 +102,7 @@ async def place_order(
     # ── Compute totals ────────────────────────────────────────
     subtotal    = sum(i.line_total for i in resolved)
     total_qty   = sum(i.qty for i in resolved)
-    shipping    = 0 if total_qty >= 3 else 79
+    shipping    = 0 if total_qty >= 3 else 79  # free shipping on 3+ pouches
     grand_total = subtotal + shipping
 
     order_id = _generate_order_id()
