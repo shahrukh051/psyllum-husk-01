@@ -135,7 +135,7 @@ async def place_order(
     await db.commit()
     log.info("Order %s placed — ₹%s (shipping: ₹%s)", order_id, grand_total, shipping)
 
-    # ── Email confirmation (non-blocking) ─────────────────────
+    # Fire email as a background task so SMTP latency never slows down the API response
     if body.customer.email:
         import asyncio
         asyncio.create_task(send_order_confirmation(
