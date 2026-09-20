@@ -35,6 +35,7 @@ from backend.services.auth_service import (
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
+# Captured once at module import; used by /telemetry to compute server uptime
 START_TIME = time.time()
 
 
