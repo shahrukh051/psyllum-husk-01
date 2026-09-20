@@ -269,7 +269,7 @@ async def login_user(
     token = create_user_token(user_id, email, name)
     settings = get_settings()
 
-    max_age = 86400 * 30 if body.remember_me else 86400
+    max_age = 86400 * 30 if body.remember_me else 86400  # 30 days vs 1 day session
     response.set_cookie(
         key="husk_customer_token",
         value=token,
