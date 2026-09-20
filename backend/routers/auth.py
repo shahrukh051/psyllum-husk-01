@@ -31,7 +31,7 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 def hash_password(password: str) -> str:
     salt = os.urandom(16)
-    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100_000)
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100_000)  # NIST-recommended minimum
     return f"{base64.b64encode(salt).decode('ascii')}${base64.b64encode(key).decode('ascii')}"
 
 
