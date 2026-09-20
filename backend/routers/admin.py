@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 import aiosqlite
+# psutil is optional — telemetry degrades gracefully to zeros if not installed
 try:
     import psutil
 except ImportError:
