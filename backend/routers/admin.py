@@ -457,7 +457,7 @@ async def customize_order(
     new_shipping = body.shipping if body.shipping is not None else row[7]
     new_total = body.grand_total if body.grand_total is not None else row[8]
 
-    # Recalculate subtotal if items were updated
+    # Recalculate subtotal from line_total; auto-derive grand_total if not explicitly set
     subtotal = row[6]
     if body.items is not None:
         subtotal = sum(it.get("line_total", it.get("price", 0) * it.get("qty", 1)) for it in body.items)
