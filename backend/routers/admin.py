@@ -88,7 +88,7 @@ async def admin_login(request: Request, body: LoginRequest, response: Response, 
     response.set_cookie(
         key="husk_admin_token",
         value=token,
-        max_age=86400 * 7,
+        max_age=86400 * 7,  # 7-day session; adjust in .env for shorter-lived tokens
         httponly=True,
         samesite="lax",
         secure=settings.is_production,
