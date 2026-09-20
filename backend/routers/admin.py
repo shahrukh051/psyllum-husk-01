@@ -177,7 +177,7 @@ async def get_admin_products(
                 "revenue": 0,
             })
 
-    # Merge with real order sales data
+    # Merge live order data into product map — keyed by product id for O(1) lookup
     prod_map = {p["id"]: p for p in products}
     async with db.execute("SELECT items_json FROM orders WHERE status != 'cancelled'") as cur:
         async for row in cur:
