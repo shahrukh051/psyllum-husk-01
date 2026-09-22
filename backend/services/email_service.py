@@ -157,7 +157,7 @@ async def _send(to: str, subject: str, html: str) -> None:
             port=settings.smtp_port,
             username=settings.smtp_user,
             password=settings.smtp_password,
-            start_tls=True,
+            start_tls=True,  # STARTTLS on port 587; set to False only for local test SMTP
         )
         log.info("Email sent to %s: %s", to, subject)
     except Exception as exc:
