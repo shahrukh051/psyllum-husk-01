@@ -50,5 +50,5 @@ def create_razorpay_order(amount_inr: int, order_id: str) -> str | None:
 
     except Exception as exc:
         log.error("Razorpay order creation failed: %s", exc)
-        # Don't block the order — just proceed without payment order
+        # Razorpay failure must never cancel a valid order — COD flow proceeds without it
         return None
