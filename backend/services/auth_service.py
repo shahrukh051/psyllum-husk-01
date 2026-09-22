@@ -74,6 +74,7 @@ def verify_admin_token(token: str) -> dict[str, Any] | None:
         if payload.get("exp", 0) < time.time():
             return None
 
+        # Reject customer tokens from being used on admin endpoints
         if payload.get("role") != "admin":
             return None
 
