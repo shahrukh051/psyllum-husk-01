@@ -108,6 +108,7 @@ async def get_admin_credentials(db: aiosqlite.Connection) -> tuple[str, str]:
 async def verify_admin_credentials(username: str, password: str, db: aiosqlite.Connection) -> bool:
     """Timing-safe verification of admin credentials against DB & config."""
     expected_user, expected_pass = await get_admin_credentials(db)
+    # compare_digest prevents timing-based attacks by always taking constant time
     user_ok = hmac.compare_digest(username.strip().lower(), expected_user.strip().lower())
     pass_ok = hmac.compare_digest(password.strip(), expected_pass.strip())
     return user_ok and pass_ok
