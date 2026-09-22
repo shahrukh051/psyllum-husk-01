@@ -21,6 +21,7 @@ def _b64_encode(data: bytes) -> str:
 
 
 def _b64_decode(s: str) -> bytes:
+    # urlsafe_b64encode strips trailing "=" padding; restore it before decoding
     padding = 4 - (len(s) % 4)
     if padding != 4:
         s += "=" * padding
