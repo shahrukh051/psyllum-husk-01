@@ -130,6 +130,7 @@ async def update_admin_password(new_password: str, db: aiosqlite.Connection) -> 
         "INSERT INTO admin_config (key, value) VALUES ('admin_username', 'shahrukh') ON CONFLICT(key) DO UPDATE SET value = excluded.value",
     )
     await db.commit()
+    # Bust the lru_cache so the next request reads the new password from DB
     get_settings.cache_clear()
     return True
 
