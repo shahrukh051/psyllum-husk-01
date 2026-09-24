@@ -262,6 +262,7 @@ async def login_user(
     name = row[1]
     email = row[2]
 
+    # Track last_login for admin dashboard activity insights and inactive account detection
     # Update last login
     await db.execute("UPDATE users SET last_login = datetime('now') WHERE id = ?", (user_id,))
     await db.commit()
