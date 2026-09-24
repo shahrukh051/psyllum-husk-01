@@ -57,6 +57,7 @@ async def submit_contact(
     await db.commit()
     log.info("Contact from %s — %s", body.email, body.subject)
 
+    # Runs in background — SMTP delay won't hold up the 201 response to the browser
     # ── Email ack (non-blocking) ──────────────────────────────
     asyncio.create_task(send_contact_acknowledgement(
         to_email=body.email,
