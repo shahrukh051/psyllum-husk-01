@@ -53,6 +53,7 @@ async def list_public_products(db: aiosqlite.Connection = Depends(get_db)):
     return {"products": products}
 
 
+# Format: HK-<hex timestamp>-<6-char random> — readable, sortable, collision-resistant
 def _generate_order_id() -> str:
     ts   = hex(int(time.time()))[2:].upper()
     rand = secrets.token_hex(3).upper()
