@@ -68,6 +68,7 @@ class Settings(BaseSettings):
 
     @property
     def email_enabled(self) -> bool:
+        # all three SMTP fields required — partial config silently disables sending
         return bool(self.smtp_host and self.smtp_user and self.smtp_password)
 
     @property
