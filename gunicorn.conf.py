@@ -22,7 +22,7 @@ worker_class = "uvicorn.workers.UvicornWorker"
 
 # Timeouts
 timeout          = 30   # kill worker if silent for 30s
-graceful_timeout = 10   # wait 10s for in-flight requests on reload
+graceful_timeout = 10   # give in-flight requests 10s to finish before forceful SIGKILL
 keepalive        = 5    # keep TCP connection alive for 5s
 
 # Logging: on cloud platforms like Render, stdout/stderr streams to the dashboard
