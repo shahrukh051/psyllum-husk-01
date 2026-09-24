@@ -202,7 +202,7 @@ async def register_user(
         value=token,
         max_age=86400 * 30,
         httponly=True,
-        samesite="lax",
+        samesite="lax",  # lax allows cookie on top-level navigations, blocking cross-site CSRF
         secure=settings.is_production,
         path="/",
     )
