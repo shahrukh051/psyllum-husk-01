@@ -68,7 +68,7 @@ app = FastAPI(
     redoc_url=None if settings.is_production else "/redoc",
     openapi_url=None if settings.is_production else "/openapi.json",
     lifespan=lifespan,
-    redirect_slashes=False,
+    redirect_slashes=False,  # avoid 307 redirects that confuse mobile clients on POST requests
 )
 
 # ── Middleware ────────────────────────────────────────────────
