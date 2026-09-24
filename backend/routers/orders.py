@@ -127,7 +127,7 @@ async def place_order(
             body.customer.phone,
             body.customer.email,
             body.customer.address,
-            json.dumps([i.model_dump() for i in resolved]),
+            json.dumps([i.model_dump() for i in resolved]),  # serialise Pydantic models to plain dicts before storing
             subtotal,
             shipping,
             grand_total,
