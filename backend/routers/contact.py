@@ -29,6 +29,7 @@ async def submit_contact(
     - Persists to SQLite contacts table
     - Sends HTML acknowledgement email (non-blocking)
     """
+    # 5-minute window prevents spam bursts without rate-limiting legitimate re-sends
     # ── Duplicate guard ───────────────────────────────────────
     async with db.execute(
         """
