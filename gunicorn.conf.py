@@ -35,7 +35,7 @@ else:
 
 # Auto-restart workers after N requests (prevents memory leaks)
 max_requests        = 1000
-max_requests_jitter = 100   # randomise to avoid thundering herd
+max_requests_jitter = 100   # ±100 randomises restart timing so all workers don't recycle simultaneously
 
 # Process naming
 proc_name   = "husk-co"
