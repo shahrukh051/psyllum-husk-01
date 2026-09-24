@@ -76,6 +76,7 @@ async def place_order(
     """
     live_products = await get_live_products(db)
 
+    # Prices are always fetched from DB here — client-sent amounts are never trusted
     # ── Validate & resolve items ──────────────────────────────
     resolved: list[OrderedItem] = []
     for item in body.items:
