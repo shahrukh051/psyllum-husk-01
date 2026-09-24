@@ -37,6 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 PUBLIC_DIR = BASE_DIR / "public"
 
 # ── Logging ───────────────────────────────────────────────────
+# INFO in dev shows request traces; WARNING in prod reduces log volume and cost
 logging.basicConfig(
     level=logging.INFO if not get_settings().is_production else logging.WARNING,
     format="%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
