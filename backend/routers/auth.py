@@ -246,7 +246,7 @@ async def login_user(
         """
         SELECT id, name, email, phone, password_hash, address, city, pincode, created_at
         FROM users
-        WHERE lower(email) = ? OR phone = ?
+        WHERE lower(email) = ? OR phone = ?  -- supports login by either email or mobile number
         """,
         (identifier, identifier),
     ) as cur:
