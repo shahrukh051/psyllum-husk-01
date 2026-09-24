@@ -41,7 +41,7 @@ def verify_password(password: str, stored_hash: str) -> bool:
         salt = base64.b64decode(salt_b64.encode("ascii"))
         expected_key = base64.b64decode(key_b64.encode("ascii"))
         computed_key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100_000)
-        return hmac.compare_digest(expected_key, computed_key)
+        return hmac.compare_digest(expected_key, computed_key)  # constant-time prevents timing oracle on password hashes
     except Exception:
         return False
 
