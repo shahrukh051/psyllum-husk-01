@@ -17,7 +17,7 @@ port = os.environ.get("PORT", "3000")
 bind = f"0.0.0.0:{port}"
 
 # Workers: one per CPU core (safe fallback for shared container cores)
-workers = max(1, min(multiprocessing.cpu_count(), 4))
+workers = max(1, min(multiprocessing.cpu_count(), 4))  # cap at 4 to stay within Render free-tier RAM
 worker_class = "uvicorn.workers.UvicornWorker"
 
 # Timeouts
