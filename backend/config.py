@@ -75,6 +75,6 @@ class Settings(BaseSettings):
         return bool(self.razorpay_key_id and self.razorpay_key_secret)
 
 
-@lru_cache
+@lru_cache  # parsed once per worker process; call get_settings.cache_clear() after env changes
 def get_settings() -> Settings:
     return Settings()
