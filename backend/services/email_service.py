@@ -144,6 +144,7 @@ async def send_contact_acknowledgement(to_email: str, name: str, message: str) -
 
 async def _send(to: str, subject: str, html: str) -> None:
     settings = get_settings()
+    # "alternative" subtype ensures mail clients render rich HTML while falling back to plaintext
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"]    = settings.email_from
