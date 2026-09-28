@@ -16,6 +16,7 @@ INDIAN_PHONE_RE = re.compile(r"^[6-9]\d{9}$")
 
 # ── Order models ──────────────────────────────────────────────
 
+# Enforce upper bound of 50 units per line item to prevent bulk inventory exhaustion attacks
 class CartItem(BaseModel):
     id:  Annotated[str, Field(min_length=1, max_length=40)]
     qty: Annotated[int, Field(ge=1, le=50)]
