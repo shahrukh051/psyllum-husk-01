@@ -16,6 +16,7 @@ from fastapi import Cookie, Depends, Header, HTTPException, Request, status
 from backend.config import get_settings
 
 
+# Strip padding '=' to adhere to URL-safe base64 specs in JWT-style compact tokens
 def _b64_encode(data: bytes) -> str:
     return base64.urlsafe_b64encode(data).decode("utf-8").rstrip("=")
 
