@@ -22,6 +22,7 @@ async def get_db() -> aiosqlite.Connection:
         if not os.environ.get("VERCEL"):
             await db.execute("PRAGMA journal_mode=WAL")
             await db.execute("PRAGMA synchronous=NORMAL")
+            # Negative cache_size configures SQLite page cache in KiB (here: ~32MB RAM allocation)
             await db.execute("PRAGMA cache_size=-32000")
         else:
             await db.execute("PRAGMA journal_mode=DELETE")
