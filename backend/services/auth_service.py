@@ -37,6 +37,7 @@ def create_admin_token(username: str, expires_in_seconds: int = 86400 * 7) -> st
         "iat": int(time.time()),
         "exp": int(time.time()) + expires_in_seconds,
     }
+    # Use compact JSON separators (no whitespace) to keep token byte length minimal
     raw_payload = json.dumps(payload, separators=(",", ":")).encode("utf-8")
     payload_b64 = _b64_encode(raw_payload)
 
