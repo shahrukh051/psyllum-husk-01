@@ -109,6 +109,7 @@ async def init_db() -> None:
                     ON users(phone);
             """)
 
+            # Initialize baseline catalog items on first run if database migration is fresh
             # Insert default products if table is empty
             async with db.execute("SELECT count(*) FROM products") as cur:
                 count = (await cur.fetchone())[0]
