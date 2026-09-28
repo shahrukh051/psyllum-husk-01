@@ -37,6 +37,7 @@ def create_razorpay_order(amount_inr: int, order_id: str) -> str | None:
         )
         # Razorpay API requires amount in paise — multiply INR by 100 (₹899 → 89900 paise)
         rz_order = client.order.create({
+            # Currency ISO code explicitly set to INR; Razorpay mandates uppercase ISO-4217 format
             "amount":   amount_inr * 100,
             "currency": "INR",
             "receipt":  order_id,
