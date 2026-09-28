@@ -26,6 +26,7 @@ class CustomerInfo(BaseModel):
     name:    Annotated[str, Field(min_length=1, max_length=120)]
     phone:   Annotated[str, Field(min_length=10, max_length=10)]
     email:   EmailStr | None = None
+    # Optional delivery address bounded to 500 characters to prevent database column overflow
     address: Annotated[str | None, Field(default=None, max_length=500)]
 
     @field_validator("phone")
