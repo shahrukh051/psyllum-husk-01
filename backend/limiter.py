@@ -12,6 +12,6 @@ from backend.config import get_settings
 
 _settings = get_settings()
 limiter = Limiter(
-    key_func=get_remote_address,
+    key_func=get_remote_address,  # extract client IP address accurately across forward proxy tiers
     default_limits=[f"{_settings.rate_limit_max}/minute"],  # e.g. "100/minute" from .env
 )
