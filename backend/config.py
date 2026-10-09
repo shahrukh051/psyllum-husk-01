@@ -58,6 +58,9 @@ class Settings(BaseSettings):
     # Trailing spaces are stripped in cors_origins property below
     allowed_origins: str = ""
 
+    # Google Gemini AI — leave blank to disable AI features
+    gemini_api_key: str = ""
+
     @property
     def is_production(self) -> bool:
         return self.environment.lower() == "production"
@@ -74,6 +77,10 @@ class Settings(BaseSettings):
     @property
     def razorpay_enabled(self) -> bool:
         return bool(self.razorpay_key_id and self.razorpay_key_secret)
+
+    @property
+    def gemini_enabled(self) -> bool:
+        return bool(self.gemini_api_key)
 
 
 @lru_cache  # parsed once per worker process; call get_settings.cache_clear() after env changes
