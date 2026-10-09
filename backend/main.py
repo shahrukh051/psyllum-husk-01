@@ -30,7 +30,7 @@ from slowapi.util import get_remote_address
 from backend.config import get_settings
 from backend.database import init_db
 from backend.limiter import limiter
-from backend.routers import admin, auth, contact, orders
+from backend.routers import admin, ai, auth, contact, orders
 
 # ── Paths ─────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,6 +124,7 @@ async def security_headers(request: Request, call_next):
 
 # ── API routers ───────────────────────────────────────────────
 app.include_router(admin.router)
+app.include_router(ai.router)
 app.include_router(auth.router)
 app.include_router(orders.router)
 app.include_router(contact.router)
